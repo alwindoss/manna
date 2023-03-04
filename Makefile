@@ -10,7 +10,7 @@ VERSION=0.0.1
 
 all: build
 docker:
-	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 $(GOBUILD) -o ./$(BINARY_LOC)/$(BINARY_NAME) -v
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 $(GOBUILD) -o ./$(BINARY_LOC)/$(BINARY_NAME) -v ./cmd/$(BINARY_NAME)/...
 package:
 	docker build -t alwindoss/$(BINARY_NAME):$(VERSION) .
 publish:
@@ -18,7 +18,7 @@ publish:
 setup:
 	$(GOGET) -v ./...
 build: 
-	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 $(GOBUILD) -o ./$(BINARY_LOC)/$(BINARY_NAME) -v
+	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 $(GOBUILD) -o ./$(BINARY_LOC)/$(BINARY_NAME) -v ./cmd/$(BINARY_NAME)/...
 test: 
 	$(GOTEST) -v ./...
 clean: 

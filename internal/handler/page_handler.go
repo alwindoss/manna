@@ -17,21 +17,21 @@ type pageHandler struct {
 
 // ShowAboutPage implements PageHandler
 func (*pageHandler) ShowAboutPage(c *fiber.Ctx) error {
-	return c.Render("about.page", fiber.Map{
+	return c.Render("views/about.page", fiber.Map{
 		"Title": "About Page",
 	})
 }
 
 // ShowContactPage implements PageHandler
 func (*pageHandler) ShowContactPage(c *fiber.Ctx) error {
-	return c.Render("contact.page", fiber.Map{
+	return c.Render("views/contact.page", fiber.Map{
 		"Title": "Contact Page",
 	})
 }
 
 // ShowHomePage implements PageHandler
 func (*pageHandler) ShowHomePage(c *fiber.Ctx) error {
-	return c.Render("home.page", fiber.Map{
+	return c.Render("views/home.page", fiber.Map{
 		"Title": "Home Page",
 	})
 }
