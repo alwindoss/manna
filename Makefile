@@ -9,6 +9,8 @@ BINARY_NAME=manna
 VERSION=0.0.1
 
 all: build
+docker-run:
+	docker run -p "3030:3030" alwindoss/$(BINARY_NAME):$(VERSION)
 docker:
 	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 $(GOBUILD) -o ./$(BINARY_LOC)/$(BINARY_NAME) -v ./cmd/$(BINARY_NAME)/...
 package:
