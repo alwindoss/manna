@@ -27,6 +27,7 @@ func (h *pageHandler) ShowLoginPage(c *fiber.Ctx) error {
 	return c.Render("views/login.page", fiber.Map{
 		"Title":         "Login",
 		"Authenticated": false,
+		"csrfToken":     c.Locals("token"),
 	})
 }
 
@@ -35,6 +36,7 @@ func (h *pageHandler) ShowAboutPage(c *fiber.Ctx) error {
 	return c.Render("views/about.page", fiber.Map{
 		"Title":         "About Page",
 		"Authenticated": false,
+		"csrfToken":     c.Locals("token"),
 	})
 }
 
@@ -43,6 +45,7 @@ func (h *pageHandler) ShowContactPage(c *fiber.Ctx) error {
 	return c.Render("views/contact.page", fiber.Map{
 		"Title":         "Contact Page",
 		"Authenticated": false,
+		"csrfToken":     c.Locals("token"),
 	})
 }
 
@@ -51,5 +54,6 @@ func (h *pageHandler) ShowHomePage(c *fiber.Ctx) error {
 	return c.Render("views/home.page", fiber.Map{
 		"Title":         "Home Page",
 		"Authenticated": false,
+		"csrfToken":     c.Locals("token"),
 	})
 }

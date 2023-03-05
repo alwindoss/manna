@@ -26,6 +26,7 @@ func (*apiHandler) Logout(c *fiber.Ctx) error {
 	return c.Render("views/home.page", fiber.Map{
 		"Title":         "Home",
 		"Authenticated": false,
+		"csrfToken":     c.Locals("token"),
 	})
 }
 
@@ -34,6 +35,7 @@ func (*apiHandler) Login(c *fiber.Ctx) error {
 	return c.Render("views/admin/home.page", fiber.Map{
 		"Title":         "Admin | Home",
 		"Authenticated": true,
+		"csrfToken":     c.Locals("token"),
 	})
 }
 

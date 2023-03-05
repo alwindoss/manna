@@ -3,10 +3,13 @@ package engine
 import (
 	"fmt"
 	"net/http"
+	"time"
 
 	"github.com/alwindoss/manna"
 	"github.com/alwindoss/manna/internal/handler"
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/csrf"
+	"github.com/gofiber/fiber/v2/utils"
 	"github.com/gofiber/template/html"
 )
 
@@ -21,6 +24,24 @@ func Run(cfg *Config) error {
 		Views:       viewEngine,
 		ViewsLayout: "views/layouts/default.layout",
 	})
+	// CSRF Config
+	// app.Use(csrf.New())
+	app.Use(csrf.New(csrf.Config{
+		// KeyLookup:      "header:X-Csrf-Token",
+		KeyLookup:      "form:_csrf",
+		CookieName:     "csrf_",
+		CookieSameSite: "Strict",
+		Expiration:     1 * time.Hour,
+		KeyGenerator:   utils.UUID,
+		ContextKey:     "token",
+		Next: func(c *fiber.Ctx) bool {
+			return false
+		},
+		// Extractor: func(c *fiber.Ctx) (string, error) {
+		// 	return "", nil
+		// },
+	}))
+
 	pageHdlrs := handler.NewPageHandler(nil)
 	apiHdlrs := handler.NewAPIHandler(nil)
 
