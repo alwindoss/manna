@@ -9,6 +9,8 @@ BINARY_NAME=manna
 VERSION=0.0.1
 
 all: build
+watch:
+	air
 docker-run:
 	docker run -p "3030:3030" alwindoss/$(BINARY_NAME):$(VERSION)
 docker:

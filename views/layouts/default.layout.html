@@ -11,6 +11,12 @@
     <!-- Navigation Start -->
     {{template "views/partials/navigation.partial" .}}
     <!-- Navigation End -->
+
+    {{if .Authenticated}}
+        <h1>Is Authenticated</h1>
+    {{else}}
+        <h1>Not Authenticated</h1>
+    {{end}}
     
     <!-- Body Start -->
     {{embed}}

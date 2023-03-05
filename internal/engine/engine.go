@@ -21,11 +21,17 @@ func Run(cfg *Config) error {
 		Views:       viewEngine,
 		ViewsLayout: "views/layouts/default.layout",
 	})
-	hdlrs := handler.NewPageHandler(nil)
+	pageHdlrs := handler.NewPageHandler(nil)
+	apiHdlrs := handler.NewAPIHandler(nil)
 
-	app.Get("/", hdlrs.ShowHomePage)
-	app.Get("/about", hdlrs.ShowAboutPage)
-	app.Get("/contact", hdlrs.ShowContactPage)
+	app.Get("/", pageHdlrs.ShowHomePage)
+	app.Get("/about", pageHdlrs.ShowAboutPage)
+	app.Get("/contact", pageHdlrs.ShowContactPage)
+	app.Get("/login", pageHdlrs.ShowLoginPage)
+
+	app.Post("/login", apiHdlrs.Login)
+	app.Get("/logout", apiHdlrs.Logout)
+
 	addr := fmt.Sprintf(":%d", cfg.Port)
 	return app.Listen(addr)
 }
