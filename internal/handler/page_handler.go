@@ -1,13 +1,12 @@
 package handler
 
 import (
-	"github.com/alwindoss/manna/internal/user"
 	"github.com/gofiber/fiber/v2"
 )
 
-func NewPageHandler(s user.Service) PageHandler {
+func NewPageHandler(c *Config) PageHandler {
 	return &pageHandler{
-		svc: s,
+		cfg: c,
 	}
 }
 
@@ -19,7 +18,8 @@ type PageHandler interface {
 }
 
 type pageHandler struct {
-	svc user.Service
+	// svc user.Service
+	cfg *Config
 }
 
 // ShowLoginPage implements PageHandler

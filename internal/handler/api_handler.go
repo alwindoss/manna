@@ -1,13 +1,14 @@
 package handler
 
 import (
-	"github.com/alwindoss/manna/internal/user"
+	"fmt"
+
 	"github.com/gofiber/fiber/v2"
 )
 
-func NewAPIHandler(s user.Service) APIHandler {
+func NewAPIHandler(c *Config) APIHandler {
 	return &apiHandler{
-		svc: s,
+		cfg: c,
 	}
 }
 
@@ -18,7 +19,8 @@ type APIHandler interface {
 }
 
 type apiHandler struct {
-	svc user.Service
+	// svc user.Service
+	cfg *Config
 }
 
 // Logout implements APIHandler
@@ -31,7 +33,21 @@ func (*apiHandler) Logout(c *fiber.Ctx) error {
 }
 
 // Login implements APIHandler
-func (*apiHandler) Login(c *fiber.Ctx) error {
+func (h *apiHandler) Login(c *fiber.Ctx) error {
+
+	sess, err := h.cfg.SessionStore.Get(c)
+	if err != nil {
+		return err
+	}
+	sess.Set("user_name", "Alwin Doss")
+	fmt.Println("User Name:", sess.Get("user_name"))
+	fmt.Println("Session ID:", sess.Get("session_id"))
+	fmt.Println("Keys:", sess.Keys())
+	// err = sess.Save()
+	// if err != nil {
+	// 	return err
+	// }
+
 	return c.Render("views/admin/home.page", fiber.Map{
 		"Title":         "Admin | Home",
 		"Authenticated": true,

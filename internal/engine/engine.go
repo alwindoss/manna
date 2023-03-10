@@ -7,8 +7,11 @@ import (
 
 	"github.com/alwindoss/manna"
 	"github.com/alwindoss/manna/internal/handler"
+	"github.com/alwindoss/manna/internal/storage"
+	"github.com/alwindoss/manna/internal/user"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/csrf"
+	"github.com/gofiber/fiber/v2/middleware/session"
 	"github.com/gofiber/fiber/v2/utils"
 	"github.com/gofiber/template/html"
 )
@@ -20,6 +23,7 @@ type Config struct {
 func Run(cfg *Config) error {
 	// viewEngine := html.New("./views", ".html")
 	viewEngine := html.NewFileSystem(http.FS(manna.ViewFS), ".html")
+
 	app := fiber.New(fiber.Config{
 		Views:       viewEngine,
 		ViewsLayout: "views/layouts/default.layout",
@@ -42,8 +46,18 @@ func Run(cfg *Config) error {
 		// },
 	}))
 
-	pageHdlrs := handler.NewPageHandler(nil)
-	apiHdlrs := handler.NewAPIHandler(nil)
+	sessionStore := session.New()
+	repo := storage.NewInMemRepository()
+	userSvc := user.NewService(repo)
+
+	handlerCfg := handler.Config{
+		UserSvc:      userSvc,
+		SessionStore: sessionStore,
+	}
+	if "" == "" {
+	}
+	pageHdlrs := handler.NewPageHandler(&handlerCfg)
+	apiHdlrs := handler.NewAPIHandler(&handlerCfg)
 
 	app.Get("/", pageHdlrs.ShowHomePage)
 	app.Get("/about", pageHdlrs.ShowAboutPage)
