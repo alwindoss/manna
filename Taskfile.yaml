@@ -1,0 +1,23 @@
+# yaml-language-server: $schema=https://taskfile.dev/schema.json
+version: "3"
+
+vars:
+  APPLICATION_NAME: manna
+  BINARY_LOC: bin
+
+tasks:
+  clean:
+    cmds:
+      - rm -rf {{.BINARY_LOC}}
+  build:
+    cmds:
+      - go build -o ./{{.BINARY_LOC}}/ -v ./cmd/{{.APPLICATION_NAME}}/...
+    sources:
+      - "**/*.go"
+    generates:
+      - "{{.BINARY_LOC}}/{{.APPLICATION_NAME}}"
+    # watch: true
+  run:
+    cmds:
+      - task: build
+      - ./{{.BINARY_LOC}}/{{.APPLICATION_NAME}}
