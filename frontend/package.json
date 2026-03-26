@@ -10,11 +10,14 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@tailwindcss/vite": "^4.2.2",
     "@wailsio/runtime": "latest",
+    "tailwindcss": "^4.2.2",
     "vue": "^3.2.45"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.0.0",
+    "daisyui": "^5.5.19",
     "vite": "^5.0.0"
   }
 }

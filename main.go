@@ -3,6 +3,8 @@ package main
 import (
 	"embed"
 	_ "embed"
+	"flag"
+	"fmt"
 	"log"
 	"time"
 
@@ -17,18 +19,33 @@ import (
 //go:embed all:frontend/dist
 var assets embed.FS
 
+var server bool
+
 func init() {
 	// Register a custom event whose associated data type is string.
 	// This is not required, but the binding generator will pick up registered events
 	// and provide a strongly typed JS/TS API for them.
 	application.RegisterEvent[string]("time")
+	flag.BoolVar(&server, "server", false, "-server")
 }
 
-// main function serves as the application's entry point. It initializes the application, creates a window,
+func main() {
+	flag.Parse()
+	if server {
+		runServer()
+	} else {
+		runDesktopApp()
+	}
+}
+
+func runServer() {
+	fmt.Println("Running the manna server")
+}
+
+// runDesktopApp function serves as the Desktop application's entry point. It initializes the application, creates a window,
 // and starts a goroutine that emits a time-based event every second. It subsequently runs the application and
 // logs any error that might occur.
-func main() {
-
+func runDesktopApp() {
 	// Create a new Wails application by providing the necessary options.
 	// Variables 'Name' and 'Description' are for application metadata.
 	// 'Assets' configures the asset server with the 'FS' variable pointing to the frontend files.
@@ -76,7 +93,6 @@ func main() {
 
 	// Run the application. This blocks until the application has been exited.
 	err := app.Run()
-
 	// If an error occurred while running the application, log it and exit.
 	if err != nil {
 		log.Fatal(err)

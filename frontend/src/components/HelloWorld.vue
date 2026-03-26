@@ -1,7 +1,7 @@
 <script setup>
 import { ref, onMounted } from 'vue'
 import {Events} from "@wailsio/runtime";
-import {GreetService} from "../../bindings/changeme";
+import {GreetService} from "../../bindings/github.com/dailymanna/manna";
 
 const name = ref('')
 const result = ref('Please enter your name below 👇')
