@@ -3,6 +3,7 @@ package app
 import (
 	"io/fs"
 	"manna/internal/bible"
+	"runtime"
 	"time"
 
 	"github.com/wailsapp/wails/v3/pkg/application"
@@ -39,13 +40,18 @@ func NewMannaApp(cfg *Config) *application.App {
 		},
 	})
 
+	m := newMenu(app)
+	// Set the application menu
+	app.Menu.Set(m)
+
 	// Create a new window with the necessary options.
 	// 'Title' is the title of the window.
 	// 'Mac' options tailor the window when running on macOS.
 	// 'BackgroundColour' is the background colour of the window.
 	// 'URL' is the URL that will be loaded into the webview.
 	app.Window.NewWithOptions(application.WebviewWindowOptions{
-		Title: "Window 1",
+		Title:              "Window 1",
+		UseApplicationMenu: true,
 		Mac: application.MacWindow{
 			InvisibleTitleBarHeight: 50,
 			Backdrop:                application.MacBackdropTranslucent,
@@ -66,4 +72,44 @@ func NewMannaApp(cfg *Config) *application.App {
 	}()
 
 	return app
+}
+
+func newMenu(a *application.App) *application.Menu {
+	menu := a.NewMenu()
+	// Add standard menus (platform-appropriate)
+	if runtime.GOOS == "darwin" {
+		menu.AddRole(application.AppMenu) // macOS only
+	}
+	// Add a top-level menu
+	fileMenu := menu.AddSubmenu("File")
+
+	// Add menu items
+	fileMenu.Add("New").SetAccelerator("CmdOrCtrl+N").OnClick(func(ctx *application.Context) {
+		// Handle New
+	})
+
+	fileMenu.Add("Open").SetAccelerator("CmdOrCtrl+O").OnClick(func(ctx *application.Context) {
+		// Handle Open
+	})
+
+	fileMenu.AddSeparator()
+
+	fileMenu.Add("Import...").OnClick(func(ctx *application.Context) {})
+	fileMenu.Add("Export...").OnClick(func(ctx *application.Context) {})
+
+	fileMenu.AddSeparator()
+
+	fileMenu.Add("Quit").SetAccelerator("CmdOrCtrl+Q").OnClick(func(ctx *application.Context) {
+		a.Quit()
+	})
+	// menu.AddRole(application.FileMenu)
+	menu.AddRole(application.EditMenu)
+	menu.AddRole(application.WindowMenu)
+	menu.AddRole(application.HelpMenu)
+
+	// fileMenu := menu.FindByRole(application.FileMenu).GetSubmenu()
+	// fileMenu.Add("Import...").OnClick(func(ctx *application.Context) {})
+	// fileMenu.Add("Export...").OnClick(func(ctx *application.Context) {})
+
+	return menu
 }
