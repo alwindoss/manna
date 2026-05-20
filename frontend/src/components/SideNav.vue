@@ -36,7 +36,7 @@ const settingStore = useSettingStore()
 <style lang="css" scoped>
 .main-content-column-left {
     /* background-color: yellow; */
-    width: 240px;          /* Lock the side panel width */
+    width: 15%;          /* Lock the side panel width */
     flex-shrink: 0;        /* Prevent it from being squeezed */
     display: flex;
     flex-direction: column;

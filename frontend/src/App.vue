@@ -39,7 +39,7 @@ import SideNav from './components/SideNav.vue';
 
 .main-content-column-right {
   background-color: blueviolet;
-  width: 240px;
+  width: 15%;
   /* Lock the side panel width */
   flex-shrink: 0;
   /* Prevent it from being squeezed */
