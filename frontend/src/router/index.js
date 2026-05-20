@@ -2,12 +2,24 @@ import { createRouter, createWebHashHistory } from 'vue-router'
 import HomeScreen from '../screens/HomeScreen.vue'
 import SettingsScreen from '../screens/SettingsScreen.vue'
 import { useUserStore } from '../stores/user'
+import NotesScreen from '../screens/NotesScreen.vue'
+import BibleScreen from '../screens/BibleScreen.vue'
 
 const routes = [
   {
     path: '/',
     name: 'home',
     component: HomeScreen,
+  },
+  {
+    path: '/notes',
+    name: 'notes',
+    component: NotesScreen,
+  },
+  {
+    path: '/bible',
+    name: 'bible',
+    component: BibleScreen,
   },
   {
     path: '/settings',

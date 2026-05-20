@@ -1,5 +1,6 @@
 <script setup>
 import Navbar from './components/Navbar.vue';
+import SideNav from './components/SideNav.vue';
 
 </script>
 
@@ -8,7 +9,39 @@ import Navbar from './components/Navbar.vue';
     <Navbar></Navbar>
   </header>
   <main>
-    <RouterView />
+    <div class="main-content">
+      <!-- Left Side Panel -->
+      <SideNav></SideNav> 
+      
+
+      <!-- Middle Panel -->
+      <div class="main-content-column-middle">
+        <RouterView />
+      </div>
+
+      <!-- Right Side Panel -->
+      <div class="main-content-column-right"></div>
+    </div>
   </main>
 </template>
+
+<style lang="css" scoped>
+.main-content {
+  display: flex;
+}
+
+
+
+.main-content-column-middle {
+  background-color: green;
+  flex-grow: 5;
+}
+
+.main-content-column-right {
+  background-color: blueviolet;
+  flex-grow: 1;
+}
+
+
+</style>
 
