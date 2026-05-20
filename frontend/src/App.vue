@@ -11,8 +11,8 @@ import SideNav from './components/SideNav.vue';
   <main>
     <div class="main-content">
       <!-- Left Side Panel -->
-      <SideNav></SideNav> 
-      
+      <SideNav></SideNav>
+
 
       <!-- Middle Panel -->
       <div class="main-content-column-middle">
@@ -39,9 +39,9 @@ import SideNav from './components/SideNav.vue';
 
 .main-content-column-right {
   background-color: blueviolet;
-  flex-grow: 1;
+  width: 240px;
+  /* Lock the side panel width */
+  flex-shrink: 0;
+  /* Prevent it from being squeezed */
 }
-
-
 </style>
-
