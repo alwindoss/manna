@@ -1,4 +1,4 @@
-module changeme
+module manna
 
 go 1.25.0
 
