@@ -1,5 +1,6 @@
 <template>
     <div class="main-content-column-left" v-if="settingStore.settings.leftMenuVisible">
+        <div class="app-name" @click="toggleSidePanel">Manna</div>
         <RouterLink class="menu-item" to="/">
             <span>
                 <House />
@@ -31,21 +32,33 @@ import { BookOpenText, House, NotebookText, Settings } from '@lucide/vue';
 import { useSettingStore } from '../stores/setting';
 
 const settingStore = useSettingStore()
+
+const toggleSidePanel = () => {
+    settingStore.toggleSidePanel()
+}
 </script>
 
 <style lang="css" scoped>
 .main-content-column-left {
-    /* background-color: yellow; */
-    width: 15%;          /* Lock the side panel width */
-    flex-shrink: 0;        /* Prevent it from being squeezed */
+    background-color: #646f78;
+    color: #ffffff;
+    width: 15%;
+    /* Lock the side panel width */
+    flex-shrink: 0;
+    /* Prevent it from being squeezed */
     display: flex;
     flex-direction: column;
+    
+}
+
+.app-name {
+    font-size: 25px;
 }
 
 .menu-item {
     margin: 3px;
     /* top | right | bottom | left */
-    padding: 10px 0 10px 10px; 
+    padding: 10px 0 10px 10px;
     border: 1px solid #3b82f6;
     border-radius: 5px;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
