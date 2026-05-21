@@ -213,12 +213,14 @@
 <script setup>
 import { BookOpenText, CalendarDays, House, NotebookText, Search, Settings, Star, Wheat } from '@lucide/vue';
 import { useUiStore } from '../stores/ui';
+import { useUserStore } from '../stores/user';
 
 
 const ui = useUiStore()
+const userStore = useUserStore()
 
-const userName    = 'James R.'
-const userInitial = 'J'
+const userName    = userStore.userDetails.name
+const userInitial = userStore.userDetails.initial
 
 const navItems = [
   { name: 'home',      label: 'Home',       icon: '⌂',  badge: null },
