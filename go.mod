@@ -1,4 +1,4 @@
-module manna
+module github.com/alwindoss/manna
 
 go 1.25.0
 

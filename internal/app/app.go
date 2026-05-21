@@ -2,9 +2,10 @@ package app
 
 import (
 	"io/fs"
-	"manna/internal/bible"
 	"runtime"
 	"time"
+
+	"github.com/alwindoss/manna/internal/bible"
 
 	"github.com/wailsapp/wails/v3/pkg/application"
 )
