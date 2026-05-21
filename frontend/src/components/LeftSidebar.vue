@@ -187,7 +187,7 @@
         >
           <span class="nav-icon"><Settings /></span>
           <Transition name="label-fade">
-            <span v-if="!ui.sidebarCollapsed" class="nav-label">Settings</span>
+            <span v-if="ui.sidebarCollapsed" class="nav-label">Settings</span>
           </Transition>
         </button>
       </RouterLink>
@@ -201,7 +201,7 @@
         >
           <span class="nav-icon profile-avatar">{{ userInitial }}</span>
           <Transition name="label-fade">
-            <span v-if="!ui.sidebarCollapsed" class="nav-label">{{ userName }}</span>
+            <span v-if="ui.sidebarCollapsed" class="nav-label">{{ userName }}</span>
           </Transition>
         </button>
       </RouterLink>
