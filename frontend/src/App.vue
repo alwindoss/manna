@@ -5,24 +5,7 @@ import SideNav from './components/SideNav.vue';
 </script>
 
 <template>
-  <header>
-    <Navbar></Navbar>
-  </header>
-  <main>
-    <div class="main-content">
-      <!-- Left Side Panel -->
-      <SideNav></SideNav>
-
-
-      <!-- Middle Panel -->
-      <div class="main-content-column-middle">
-        <RouterView />
-      </div>
-
-      <!-- Right Side Panel -->
-      <div class="main-content-column-right"></div>
-    </div>
-  </main>
+  <RouterView />
 </template>
 
 <style lang="css" scoped>

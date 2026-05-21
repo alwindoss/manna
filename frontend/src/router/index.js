@@ -4,12 +4,13 @@ import SettingsScreen from '../screens/SettingsScreen.vue'
 import { useUserStore } from '../stores/user'
 import NotesScreen from '../screens/NotesScreen.vue'
 import BibleScreen from '../screens/BibleScreen.vue'
+import Prototype from '../screens/Prototype.vue'
 
 const routes = [
   {
     path: '/',
     name: 'home',
-    component: HomeScreen,
+    component: Prototype,
   },
   {
     path: '/notes',

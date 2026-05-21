@@ -50,7 +50,7 @@ func NewMannaApp(cfg *Config) *application.App {
 	// 'BackgroundColour' is the background colour of the window.
 	// 'URL' is the URL that will be loaded into the webview.
 	app.Window.NewWithOptions(application.WebviewWindowOptions{
-		Title:              "Window 1",
+		Title:              "Manna - Renew your mind",
 		UseApplicationMenu: true,
 		Mac: application.MacWindow{
 			InvisibleTitleBarHeight: 50,
