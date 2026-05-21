@@ -9,7 +9,8 @@
             <!-- Top: Logo / Brand -->
             <div class="sidebar-brand">
                 <!-- <span class="brand-icon">✦</span> -->
-                <span class="brand-icon"><Brain color="#4a3218" /></span>
+                <!-- <span class="brand-icon"><Brain color="#4a3218" /></span> -->
+                <span class="brand-icon"><Wheat color="#4a3218" /></span>
                 <transition name="label-fade">
                     <span v-if="!sidebarCollapsed" class="brand-text">Manna</span>
                 </transition>
@@ -271,7 +272,7 @@
 </template>
 
 <script setup>
-import { Brain } from '@lucide/vue'
+import { Wheat } from '@lucide/vue'
 import { ref, computed } from 'vue'
 
 /* ── State ─────────────────────────────────── */
