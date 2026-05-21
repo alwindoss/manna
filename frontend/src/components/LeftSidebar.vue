@@ -22,7 +22,136 @@
 
     <!-- Primary nav -->
     <nav class="sidebar-nav">
+      
       <RouterLink
+        to="/home"
+        class="nav-item"
+        :title="ui.sidebarCollapsed ? 'Home' : ''"
+        custom
+        v-slot="{ navigate, isActive }"
+      >
+        <button
+          class="nav-item"
+          :class="{ active: isActive }"
+          @click="navigate"
+        >
+          <span class="nav-icon"><House /></span>
+          <Transition name="label-fade">
+            <span v-if="!ui.sidebarCollapsed" class="nav-label">Home</span>
+          </Transition>
+          <Transition name="label-fade">
+            <span v-if="ui.sidebarCollapsed" class="nav-badge"><House /></span>
+          </Transition>
+        </button>
+      </RouterLink>
+      <RouterLink
+        to="/read"
+        class="nav-item"
+        :title="ui.sidebarCollapsed ? 'Read Bible' : ''"
+        custom
+        v-slot="{ navigate, isActive }"
+      >
+        <button
+          class="nav-item"
+          :class="{ active: isActive }"
+          @click="navigate"
+        >
+          <span class="nav-icon"><BookOpenText /></span>
+          <Transition name="label-fade">
+            <span v-if="!ui.sidebarCollapsed" class="nav-label">Read Bible</span>
+          </Transition>
+          <Transition name="label-fade">
+            <span v-if="ui.sidebarCollapsed" class="nav-badge"><BookOpenText /></span>
+          </Transition>
+        </button>
+      </RouterLink>
+      <RouterLink
+        to="/notes"
+        class="nav-item"
+        :title="ui.sidebarCollapsed ? 'Notes' : ''"
+        custom
+        v-slot="{ navigate, isActive }"
+      >
+        <button
+          class="nav-item"
+          :class="{ active: isActive }"
+          @click="navigate"
+        >
+          <span class="nav-icon"><NotebookText /></span>
+          <Transition name="label-fade">
+            <span v-if="!ui.sidebarCollapsed" class="nav-label">Notes</span>
+          </Transition>
+          <Transition name="label-fade">
+            <span v-if="ui.sidebarCollapsed" class="nav-badge"><NotebookText /></span>
+          </Transition>
+        </button>
+      </RouterLink>
+      <RouterLink
+        to="/bookmarks"
+        class="nav-item"
+        :title="ui.sidebarCollapsed ? 'Bookmarks' : ''"
+        custom
+        v-slot="{ navigate, isActive }"
+      >
+        <button
+          class="nav-item"
+          :class="{ active: isActive }"
+          @click="navigate"
+        >
+          <span class="nav-icon"><Star /></span>
+          <Transition name="label-fade">
+            <span v-if="!ui.sidebarCollapsed" class="nav-label">Bookmarks</span>
+          </Transition>
+          <Transition name="label-fade">
+            <span v-if="ui.sidebarCollapsed" class="nav-badge"><Star /></span>
+          </Transition>
+        </button>
+      </RouterLink>
+      <RouterLink
+        to="/plans"
+        class="nav-item"
+        :title="ui.sidebarCollapsed ? 'Plans' : ''"
+        custom
+        v-slot="{ navigate, isActive }"
+      >
+        <button
+          class="nav-item"
+          :class="{ active: isActive }"
+          @click="navigate"
+        >
+          <span class="nav-icon"><CalendarDays /></span>
+          <Transition name="label-fade">
+            <span v-if="!ui.sidebarCollapsed" class="nav-label">Plans</span>
+          </Transition>
+          <Transition name="label-fade">
+            <span v-if="ui.sidebarCollapsed" class="nav-badge"><CalendarDays /></span>
+          </Transition>
+        </button>
+      </RouterLink>
+      <RouterLink
+        to="/search"
+        class="nav-item"
+        :title="ui.sidebarCollapsed ? 'Search' : ''"
+        custom
+        v-slot="{ navigate, isActive }"
+      >
+        <button
+          class="nav-item"
+          :class="{ active: isActive }"
+          @click="navigate"
+        >
+          <span class="nav-icon"><Search /></span>
+          <Transition name="label-fade">
+            <span v-if="!ui.sidebarCollapsed" class="nav-label">Search</span>
+          </Transition>
+          <Transition name="label-fade">
+            <span v-if="ui.sidebarCollapsed" class="nav-badge"><Search /></span>
+          </Transition>
+        </button>
+      </RouterLink>
+
+      <!-- Iterative way of showing nav -->
+      <!-- <RouterLink
         v-for="item in navItems"
         :key="item.name"
         :to="{ name: item.name }"
@@ -44,26 +173,26 @@
             <span v-if="!ui.sidebarCollapsed && item.badge" class="nav-badge">{{ item.badge }}</span>
           </Transition>
         </button>
-      </RouterLink>
+      </RouterLink> -->
     </nav>
 
     <!-- Footer: Settings + Profile -->
     <div class="sidebar-footer">
-      <RouterLink :to="{ name: 'settings' }" custom v-slot="{ navigate, isActive }">
+      <RouterLink to="/settings" custom v-slot="{ navigate, isActive }">
         <button
           class="nav-item footer-item"
           :class="{ active: isActive }"
           :title="ui.sidebarCollapsed ? 'Settings' : ''"
           @click="navigate"
         >
-          <span class="nav-icon">⚙</span>
+          <span class="nav-icon"><Settings /></span>
           <Transition name="label-fade">
             <span v-if="!ui.sidebarCollapsed" class="nav-label">Settings</span>
           </Transition>
         </button>
       </RouterLink>
 
-      <RouterLink :to="{ name: 'profile' }" custom v-slot="{ navigate, isActive }">
+      <RouterLink to="/profile" custom v-slot="{ navigate, isActive }">
         <button
           class="nav-item footer-item profile-item"
           :class="{ active: isActive }"
@@ -82,7 +211,7 @@
 </template>
 
 <script setup>
-import { Wheat } from '@lucide/vue';
+import { BookOpenText, CalendarDays, House, NotebookText, Search, Settings, Star, Wheat } from '@lucide/vue';
 import { useUiStore } from '../stores/ui';
 
 
@@ -93,6 +222,7 @@ const userInitial = 'J'
 
 const navItems = [
   { name: 'home',      label: 'Home',       icon: '⌂',  badge: null },
+  // { name: 'home',      label: 'Home',       icon: '<House />',  badge: null },
   { name: 'read',      label: 'Read Bible', icon: '📖', badge: null },
   { name: 'notes',     label: 'Notes',      icon: '✎',  badge: '3'  },
   { name: 'bookmarks', label: 'Bookmarks',  icon: '🔖', badge: null },
