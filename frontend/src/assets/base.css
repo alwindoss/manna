@@ -1,5 +1,51 @@
+/* ═══════════════════════════════════════════════════════════
+   VERBUM — DESIGN TOKENS
+   Import this file once in main.js or App.vue
+════════════════════════════════════════════════════════════ */
 :root {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  /* Palette */
+  --parchment:      #f7f2e8;
+  --parchment-mid:  #ede6d5;
+  --parchment-dark: #d9cfb8;
+  --sidebar-bg:     #1c1610;
+  --sidebar-text:   #c8b99a;
+  --sidebar-hover:  rgba(200, 185, 154, 0.12);
+  --sidebar-active: #8b6f3e;
+  --ink:            #2c1f0e;
+  --ink-mid:        #5a4230;
+  --ink-light:      #8b7355;
+  --gold:           #c9973a;
+  --gold-light:     #e8c06a;
+  --red-accent:     #8b2e2e;
+  --border:         #d5c9b0;
+  --border-light:   #e8e0cc;
+  --white:          #ffffff;
+
+  /* Layout */
+  --sidebar-w:      220px;
+  --sidebar-w-min:  64px;
+  --right-panel-w:  300px;
+  --header-h:       64px;
+  --radius:         10px;
+  --transition:     0.28s cubic-bezier(0.4, 0, 0.2, 1);
 }
+
+/* ── Global reset ───────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body, #app {
+  height: 100%;
+  overflow: hidden;
+  font-family: 'Georgia', 'Times New Roman', serif;
+  background: var(--parchment);
+  color: var(--ink);
+}
+
+/* ── Shared scrollbar ───────────────────────── */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--parchment-dark); border-radius: 3px; }
