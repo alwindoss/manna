@@ -5,7 +5,7 @@ import (
 	"runtime"
 	"time"
 
-	"github.com/alwindoss/manna/internal/bible"
+	"github.com/dailymanna/manna/internal/bible"
 
 	"github.com/wailsapp/wails/v3/pkg/application"
 )

@@ -1,4 +1,4 @@
-module github.com/alwindoss/manna
+module github.com/dailymanna/manna
 
 go 1.26.3
 

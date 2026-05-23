@@ -5,7 +5,7 @@ import (
 	_ "embed"
 	"log"
 
-	"github.com/alwindoss/manna/internal/app"
+	"github.com/dailymanna/manna/internal/app"
 )
 
 // Wails uses Go's `embed` package to embed the frontend files into the binary.
