@@ -5,7 +5,7 @@
       <select class="bible-select" @change="updateChapters" v-model="selectedBook">
         <option v-for="b in books" :key="b" :value="b">{{ b }}</option>
       </select>
-      <select class="bible-select" v-model="selectedChapter">
+      <select class="bible-select" @change="updateChapters" v-model="selectedChapter">
         <option v-for="c in chapters" :key="c" :value="c">Chapter {{ c }}</option>
       </select>
       <select class="bible-select" v-model="selectedTranslation">
@@ -33,7 +33,7 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import { useUiStore } from '../stores/ui'
-import { GetBooksOfTheBible, GetChaptersInTheBook } from '../../bindings/github.com/dailymanna/manna/internal/bible/bibleservice'
+import { GetBooksOfTheBible, GetChaptersInTheBook, GetVerses } from '../../bindings/github.com/dailymanna/manna/internal/bible/bibleservice'
 
 const ui = useUiStore()
 
@@ -48,25 +48,30 @@ var chapters = ref([])
 
 var numOfChapters = ref(0)
 
-const sampleVerses = [
-  { num: 1, text: 'In the beginning God created the heavens and the earth.' },
-  { num: 2, text: 'Now the earth was formless and empty, darkness was over the surface of the deep, and the Spirit of God was hovering over the waters.' },
-  { num: 3, text: 'And God said, "Let there be light," and there was light.' },
-  { num: 4, text: 'God saw that the light was good, and he separated the light from the darkness.' },
-  { num: 5, text: 'God called the light "day," and the darkness he called "night." And there was evening, and there was morning—the first day.' },
-  { num: 6, text: 'And God said, "Let there be a vault between the waters to separate water from water."' },
-  { num: 7, text: 'So God made the vault and separated the water under the vault from the water above it. And it was so.' },
-  { num: 8, text: 'God called the vault "sky." And there was evening, and there was morning—the second day.' },
-  { num: 9, text: 'And God said, "Let the water under the sky be gathered to one place, and let dry ground appear." And it was so.' },
-  { num: 10, text: 'God called the dry ground "land," and the gathered waters he called "seas." And God saw that it was good.' },
-]
+// const sampleVerses = [
+//   { num: 1, text: 'In the beginning God created the heavens and the earth.' },
+//   { num: 2, text: 'Now the earth was formless and empty, darkness was over the surface of the deep, and the Spirit of God was hovering over the waters.' },
+//   { num: 3, text: 'And God said, "Let there be light," and there was light.' },
+//   { num: 4, text: 'God saw that the light was good, and he separated the light from the darkness.' },
+//   { num: 5, text: 'God called the light "day," and the darkness he called "night." And there was evening, and there was morning—the first day.' },
+//   { num: 6, text: 'And God said, "Let there be a vault between the waters to separate water from water."' },
+//   { num: 7, text: 'So God made the vault and separated the water under the vault from the water above it. And it was so.' },
+//   { num: 8, text: 'God called the vault "sky." And there was evening, and there was morning—the second day.' },
+//   { num: 9, text: 'And God said, "Let the water under the sky be gathered to one place, and let dry ground appear." And it was so.' },
+//   { num: 10, text: 'God called the dry ground "land," and the gathered waters he called "seas." And God saw that it was good.' },
+// ]
+const sampleVerses = ref([])
 
 const updateChapters = () => {
-  console.log("Selcted Book:", selectedBook.value)
   GetChaptersInTheBook(selectedBook.value).then((data) => {
-    console.log("Number of chapters:", data)
     numOfChapters.value = data
     chapters.value = Array.from({ length: data }, (_, i) => i + 1)
+    GetVerses("KJV", selectedBook.value, selectedChapter.value).then((verses) => {
+      sampleVerses.value = verses.verses
+      // verses.forEach((d) => {
+      //   console.log("Data:", d)
+      // })
+    })
   })
 }
 
@@ -75,9 +80,15 @@ onMounted(() => {
     books.value = data
     selectedBook.value = data[0]
     GetChaptersInTheBook(selectedBook.value).then((data) => {
-      console.log("Number of chapters:", data)
       numOfChapters.value = data
       chapters.value = Array.from({ length: data }, (_, i) => i + 1)
+      selectedChapter.value = 1
+      GetVerses("KJV", selectedBook.value, selectedChapter.value).then((verses) => {
+        sampleVerses.value = verses.verses
+        // verses.forEach((d) => {
+        //   console.log("Data:", d)
+        // })
+      })
     })
   })
 })

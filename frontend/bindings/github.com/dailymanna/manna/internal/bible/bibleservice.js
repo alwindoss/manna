@@ -107,6 +107,18 @@ export function GetNotesByChapter(book, chapter) {
 }
 
 /**
+ * @param {string} version
+ * @param {string} book
+ * @param {number} chapter
+ * @returns {$CancellablePromise<$models.GetVersesResponse | null>}
+ */
+export function GetVerses(version, book, chapter) {
+    return $Call.ByID(931891162, version, book, chapter).then(/** @type {($result: any) => any} */(($result) => {
+        return $$createType5($result);
+    }));
+}
+
+/**
  * @param {string} book
  * @param {number} chapter
  * @returns {$CancellablePromise<number>}
@@ -116,11 +128,12 @@ export function GetVersesInTheChapter(book, chapter) {
 }
 
 /**
- * @param {io$0.Reader | null} f
+ * @param {io$0.Reader} f
+ * @param {string} version
  * @returns {$CancellablePromise<void>}
  */
-export function Import(f) {
-    return $Call.ByID(1693328977, f);
+export function Import(f, version) {
+    return $Call.ByID(1693328977, f, version);
 }
 
 /**
@@ -140,3 +153,5 @@ const $$createType0 = $models.Note.createFrom;
 const $$createType1 = $Create.Nullable($$createType0);
 const $$createType2 = $Create.Array($$createType1);
 const $$createType3 = $Create.Array($Create.Any);
+const $$createType4 = $models.GetVersesResponse.createFrom;
+const $$createType5 = $Create.Nullable($$createType4);

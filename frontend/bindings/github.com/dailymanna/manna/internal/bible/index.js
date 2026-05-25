@@ -8,6 +8,8 @@ export {
 };
 
 export {
+    GetVersesResponse,
     Note,
+    Verse1,
     VerseKey
 } from "./models.js";

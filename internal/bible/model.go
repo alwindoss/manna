@@ -3,7 +3,8 @@ package bible
 import "time"
 
 type Bible struct {
-	Books []Book
+	Books   []*Book
+	Version string
 }
 
 // Book represents a book of the Bible with its metadata.
@@ -15,12 +16,18 @@ type Book struct {
 	Genre        string       `json:"genre"`      // e.g., "Pentateuch", "Gospels", "Epistle"
 	Metadata     BookMetadata `json:"metadata"`
 	ChapterCount int          `json:"chapter_count"`
+	Chapters     []*Chapter
 }
 
 type BookMetadata struct {
 	Authorship string `json:"authorship"` // e.g., "Moses"
 	Dating     string `json:"dating"`     // e.g., "c. 1445–1405 BC"
 	Summary    string `json:"summary"`    // Short introduction for study
+}
+
+type Chapter struct {
+	Number int
+	Verses []*Verse
 }
 
 // VerseKey acts as a unique, lightweight identifier for any verse in the Bible.

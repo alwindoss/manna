@@ -1,12 +1,25 @@
 package bible
 
-import "io"
+import (
+	"fmt"
+	"io"
+	"os"
+	"strconv"
+
+	biblepkg "github.com/dailymanna/manna/pkg/bible"
+)
 
 func NewBibleService() *BibleService {
 	bs := new(BibleService)
 	bs.bibleBooks = bibleBooks
 	bs.bibleChapters = bibleChapters
 	bs.bibleVerses = bibleVerses
+	f, err := os.Open("./data/bibles/KJV.xmm")
+	if err != nil {
+		panic(err)
+	}
+	bs.Import(f, "KJV")
+
 	return bs
 }
 
@@ -14,7 +27,7 @@ type BibleService struct {
 	bibleBooks    []string
 	bibleChapters map[string]int
 	bibleVerses   map[string][]int
-	bibles        []Bible
+	bibles        []*Bible
 	notes         []Note
 }
 
@@ -36,8 +49,77 @@ func (bs *BibleService) GetVersesInTheChapter(book string, chapter int) int {
 type ImportResult struct {
 }
 
-func (bs *BibleService) Import(f *io.Reader) error {
+func (bs *BibleService) Import(f io.Reader, version string) error {
+	fmt.Println("I am here")
+	osb, err := biblepkg.ParseOpenSongBible(f)
+	if err != nil {
+		return err
+	}
+	bbl := new(Bible)
+	bbl.Version = version
+	for bkIndex, book := range osb.B {
+		fmt.Printf("Book Name: %s\n", book.N)
+		bk := new(Book)
+		bk.Name = book.N
+		for _, chapter := range book.C {
+			fmt.Printf("Chapter: %s\n", chapter.N)
+			ch := new(Chapter)
+			chNum, _ := strconv.Atoi(chapter.N)
+			ch.Number = chNum
+			for _, verse := range chapter.V {
+				v := new(Verse)
+				bkID := bkIndex + 1
+				v.BookID = bkID
+				v.Chapter = chNum
+				v.Verse, _ = strconv.Atoi(verse.N)
+				v.Text = verse.Text
+				ch.Verses = append(ch.Verses, v)
+			}
+			bk.Chapters = append(bk.Chapters, ch)
+		}
+		bk.ChapterCount = len(bk.Chapters)
+		bbl.Books = append(bbl.Books, bk)
+	}
+	bs.bibles = append(bs.bibles, bbl)
+
 	return nil
+}
+
+type Verse1 struct {
+	Num  string `json:"num"`
+	Text string `json:"text"`
+}
+
+type GetVersesResponse struct {
+	Verses []*Verse1 `json:"verses"`
+}
+
+func (bs *BibleService) GetVerses(version string, book string, chapter int) *GetVersesResponse {
+	var verses []*Verse1
+	for _, bbl := range bs.bibles {
+		if bbl.Version == version {
+			for _, bk := range bbl.Books {
+				if bk.Name == book {
+					for _, chap := range bk.Chapters {
+						if chap.Number == chapter {
+							// verses = chap.Verses
+							for i, v := range chap.Verses {
+								gvr := &Verse1{
+									Num:  strconv.Itoa(i + 1),
+									Text: v.Text,
+								}
+								verses = append(verses, gvr)
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+	gvc := &GetVersesResponse{
+		Verses: verses,
+	}
+	return gvc
 }
 
 func (bs *BibleService) AddNote(text string, book, chapter, verse int) error {

@@ -10,6 +10,38 @@ import { Create as $Create } from "@wailsio/runtime";
 // @ts-ignore: Unused imports
 import * as time$0 from "../../../../../time/models.js";
 
+export class GetVersesResponse {
+    /**
+     * Creates a new GetVersesResponse instance.
+     * @param {Partial<GetVersesResponse>} [$$source = {}] - The source object to create the GetVersesResponse.
+     */
+    constructor($$source = {}) {
+        if (!("verses" in $$source)) {
+            /**
+             * @member
+             * @type {(Verse1 | null)[]}
+             */
+            this["verses"] = [];
+        }
+
+        Object.assign(this, $$source);
+    }
+
+    /**
+     * Creates a new GetVersesResponse instance from a string or object.
+     * @param {any} [$$source = {}]
+     * @returns {GetVersesResponse}
+     */
+    static createFrom($$source = {}) {
+        const $$createField0_0 = $$createType2;
+        let $$parsedSource = typeof $$source === 'string' ? JSON.parse($$source) : $$source;
+        if ("verses" in $$parsedSource) {
+            $$parsedSource["verses"] = $$createField0_0($$parsedSource["verses"]);
+        }
+        return new GetVersesResponse(/** @type {Partial<GetVersesResponse>} */($$parsedSource));
+    }
+}
+
 /**
  * Note represents user-generated study content or commentary.
  */
@@ -80,12 +112,47 @@ export class Note {
      * @returns {Note}
      */
     static createFrom($$source = {}) {
-        const $$createField1_0 = $$createType0;
+        const $$createField1_0 = $$createType3;
         let $$parsedSource = typeof $$source === 'string' ? JSON.parse($$source) : $$source;
         if ("verse_ref" in $$parsedSource) {
             $$parsedSource["verse_ref"] = $$createField1_0($$parsedSource["verse_ref"]);
         }
         return new Note(/** @type {Partial<Note>} */($$parsedSource));
+    }
+}
+
+export class Verse1 {
+    /**
+     * Creates a new Verse1 instance.
+     * @param {Partial<Verse1>} [$$source = {}] - The source object to create the Verse1.
+     */
+    constructor($$source = {}) {
+        if (!("num" in $$source)) {
+            /**
+             * @member
+             * @type {string}
+             */
+            this["num"] = "";
+        }
+        if (!("text" in $$source)) {
+            /**
+             * @member
+             * @type {string}
+             */
+            this["text"] = "";
+        }
+
+        Object.assign(this, $$source);
+    }
+
+    /**
+     * Creates a new Verse1 instance from a string or object.
+     * @param {any} [$$source = {}]
+     * @returns {Verse1}
+     */
+    static createFrom($$source = {}) {
+        let $$parsedSource = typeof $$source === 'string' ? JSON.parse($$source) : $$source;
+        return new Verse1(/** @type {Partial<Verse1>} */($$parsedSource));
     }
 }
 
@@ -136,4 +203,7 @@ export class VerseKey {
 }
 
 // Private type creation functions
-const $$createType0 = VerseKey.createFrom;
+const $$createType0 = Verse1.createFrom;
+const $$createType1 = $Create.Nullable($$createType0);
+const $$createType2 = $Create.Array($$createType1);
+const $$createType3 = VerseKey.createFrom;
