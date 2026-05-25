@@ -47,6 +47,23 @@ export function GetAllNotes() {
 }
 
 /**
+ * @returns {$CancellablePromise<string[]>}
+ */
+export function GetBooksOfTheBible() {
+    return $Call.ByID(2449458788).then(/** @type {($result: any) => any} */(($result) => {
+        return $$createType3($result);
+    }));
+}
+
+/**
+ * @param {string} book
+ * @returns {$CancellablePromise<number>}
+ */
+export function GetChaptersInTheBook(book) {
+    return $Call.ByID(3745647489, book);
+}
+
+/**
  * @param {number} id
  * @returns {$CancellablePromise<($models.Note | null)[]>}
  */
@@ -90,6 +107,15 @@ export function GetNotesByChapter(book, chapter) {
 }
 
 /**
+ * @param {string} book
+ * @param {number} chapter
+ * @returns {$CancellablePromise<number>}
+ */
+export function GetVersesInTheChapter(book, chapter) {
+    return $Call.ByID(399379689, book, chapter);
+}
+
+/**
  * @param {io$0.Reader | null} f
  * @returns {$CancellablePromise<void>}
  */
@@ -113,3 +139,4 @@ export function UpdateNote(id, text, book, chapter, verse) {
 const $$createType0 = $models.Note.createFrom;
 const $$createType1 = $Create.Nullable($$createType0);
 const $$createType2 = $Create.Array($$createType1);
+const $$createType3 = $Create.Array($Create.Any);

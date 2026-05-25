@@ -4,13 +4,33 @@ import "io"
 
 func NewBibleService() *BibleService {
 	bs := new(BibleService)
-
+	bs.bibleBooks = bibleBooks
+	bs.bibleChapters = bibleChapters
+	bs.bibleVerses = bibleVerses
 	return bs
 }
 
 type BibleService struct {
-	bibles []Bible
-	notes  []Note
+	bibleBooks    []string
+	bibleChapters map[string]int
+	bibleVerses   map[string][]int
+	bibles        []Bible
+	notes         []Note
+}
+
+func (bs *BibleService) GetBooksOfTheBible() []string {
+	return bs.bibleBooks
+}
+
+func (bs *BibleService) GetChaptersInTheBook(book string) int {
+	c := bibleChapters[book]
+	return c
+}
+
+func (bs *BibleService) GetVersesInTheChapter(book string, chapter int) int {
+	b := bibleVerses[book]
+	v := b[chapter-1]
+	return v
 }
 
 type ImportResult struct {

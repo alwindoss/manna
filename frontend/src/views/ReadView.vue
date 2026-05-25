@@ -2,7 +2,7 @@
   <div class="view-read">
 
     <div class="bible-nav">
-      <select class="bible-select" v-model="selectedBook">
+      <select class="bible-select" @change="updateChapters" v-model="selectedBook">
         <option v-for="b in books" :key="b" :value="b">{{ b }}</option>
       </select>
       <select class="bible-select" v-model="selectedChapter">
@@ -36,17 +36,22 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { useUiStore } from '../stores/ui'
+import { GetBooksOfTheBible, GetChaptersInTheBook } from '../../bindings/github.com/dailymanna/manna/internal/bible/bibleservice'
 
 const ui = useUiStore()
 
-const selectedBook        = ref('Genesis')
+const selectedBook        = ref('')
 const selectedChapter     = ref(1)
 const selectedTranslation = ref('NIV')
 
-const books    = ['Genesis','Exodus','Psalms','Proverbs','Matthew','John','Romans','Revelation']
-const chapters = Array.from({ length: 50 }, (_, i) => i + 1)
+// const books    = ['Genesis','Exodus','Psalms','Proverbs','Matthew','John','Romans','Revelation']
+var books    = ref([])
+// const chapters = Array.from({ length: 50 }, (_, i) => i + 1)
+var chapters = ref([])
+
+var numOfChapters = ref(0)
 
 const sampleVerses = [
   { num: 1,  text: 'In the beginning God created the heavens and the earth.' },
@@ -60,6 +65,22 @@ const sampleVerses = [
   { num: 9,  text: 'And God said, "Let the water under the sky be gathered to one place, and let dry ground appear." And it was so.' },
   { num: 10, text: 'God called the dry ground "land," and the gathered waters he called "seas." And God saw that it was good.' },
 ]
+
+const updateChapters = () => {
+  console.log("Selcted Book:", selectedBook.value)
+  GetChaptersInTheBook(selectedBook.value).then((data) => {
+    console.log("Number of chapters:", data)
+    numOfChapters.value = data
+    chapters.value = Array.from({ length: data }, (_, i) => i + 1)
+  })
+}
+
+onMounted(() => {
+  GetBooksOfTheBible().then((data) => {
+    books.value = data
+    selectedBook.value = data[0]
+  })
+})
 </script>
 
 <style scoped>
