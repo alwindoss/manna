@@ -19,13 +19,8 @@
     <div class="scripture-body">
       <h2 class="scripture-heading">{{ selectedBook }} · Chapter {{ selectedChapter }}</h2>
       <div class="verses">
-        <div
-          v-for="verse in sampleVerses"
-          :key="verse.num"
-          class="verse"
-          :class="{ highlighted: ui.isVerseHighlighted(verse.num) }"
-          @click="ui.toggleVerseHighlight(verse.num)"
-        >
+        <div v-for="verse in sampleVerses" :key="verse.num" class="verse"
+          :class="{ highlighted: ui.isVerseHighlighted(verse.num) }" @click="ui.toggleVerseHighlight(verse.num)">
           <span class="verse-num">{{ verse.num }}</span>
           <span class="verse-text">{{ verse.text }}</span>
         </div>
@@ -42,27 +37,27 @@ import { GetBooksOfTheBible, GetChaptersInTheBook } from '../../bindings/github.
 
 const ui = useUiStore()
 
-const selectedBook        = ref('')
-const selectedChapter     = ref(1)
+const selectedBook = ref('Genesis')
+const selectedChapter = ref(1)
 const selectedTranslation = ref('NIV')
 
 // const books    = ['Genesis','Exodus','Psalms','Proverbs','Matthew','John','Romans','Revelation']
-var books    = ref([])
+var books = ref([])
 // const chapters = Array.from({ length: 50 }, (_, i) => i + 1)
 var chapters = ref([])
 
 var numOfChapters = ref(0)
 
 const sampleVerses = [
-  { num: 1,  text: 'In the beginning God created the heavens and the earth.' },
-  { num: 2,  text: 'Now the earth was formless and empty, darkness was over the surface of the deep, and the Spirit of God was hovering over the waters.' },
-  { num: 3,  text: 'And God said, "Let there be light," and there was light.' },
-  { num: 4,  text: 'God saw that the light was good, and he separated the light from the darkness.' },
-  { num: 5,  text: 'God called the light "day," and the darkness he called "night." And there was evening, and there was morning—the first day.' },
-  { num: 6,  text: 'And God said, "Let there be a vault between the waters to separate water from water."' },
-  { num: 7,  text: 'So God made the vault and separated the water under the vault from the water above it. And it was so.' },
-  { num: 8,  text: 'God called the vault "sky." And there was evening, and there was morning—the second day.' },
-  { num: 9,  text: 'And God said, "Let the water under the sky be gathered to one place, and let dry ground appear." And it was so.' },
+  { num: 1, text: 'In the beginning God created the heavens and the earth.' },
+  { num: 2, text: 'Now the earth was formless and empty, darkness was over the surface of the deep, and the Spirit of God was hovering over the waters.' },
+  { num: 3, text: 'And God said, "Let there be light," and there was light.' },
+  { num: 4, text: 'God saw that the light was good, and he separated the light from the darkness.' },
+  { num: 5, text: 'God called the light "day," and the darkness he called "night." And there was evening, and there was morning—the first day.' },
+  { num: 6, text: 'And God said, "Let there be a vault between the waters to separate water from water."' },
+  { num: 7, text: 'So God made the vault and separated the water under the vault from the water above it. And it was so.' },
+  { num: 8, text: 'God called the vault "sky." And there was evening, and there was morning—the second day.' },
+  { num: 9, text: 'And God said, "Let the water under the sky be gathered to one place, and let dry ground appear." And it was so.' },
   { num: 10, text: 'God called the dry ground "land," and the gathered waters he called "seas." And God saw that it was good.' },
 ]
 
@@ -79,12 +74,21 @@ onMounted(() => {
   GetBooksOfTheBible().then((data) => {
     books.value = data
     selectedBook.value = data[0]
+    GetChaptersInTheBook(selectedBook.value).then((data) => {
+      console.log("Number of chapters:", data)
+      numOfChapters.value = data
+      chapters.value = Array.from({ length: data }, (_, i) => i + 1)
+    })
   })
 })
 </script>
 
 <style scoped>
-.view-read { display: flex; flex-direction: column; gap: 20px; }
+.view-read {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
 
 /* ── Nav bar ────────────────────────────────── */
 .bible-nav {
@@ -92,6 +96,7 @@ onMounted(() => {
   gap: 10px;
   flex-wrap: wrap;
 }
+
 .bible-select {
   appearance: none;
   background: var(--white);
@@ -103,7 +108,11 @@ onMounted(() => {
   color: var(--ink);
   cursor: pointer;
 }
-.bible-select:focus { outline: 2px solid var(--gold); outline-offset: 1px; }
+
+.bible-select:focus {
+  outline: 2px solid var(--gold);
+  outline-offset: 1px;
+}
 
 /* ── Scripture ──────────────────────────────── */
 .scripture-heading {
@@ -114,6 +123,7 @@ onMounted(() => {
   border-bottom: 1px solid var(--border-light);
   letter-spacing: 0.02em;
 }
+
 .verse {
   display: flex;
   gap: 14px;
@@ -123,8 +133,14 @@ onMounted(() => {
   line-height: 1.8;
   transition: background var(--transition);
 }
-.verse:hover       { background: var(--parchment-mid); }
-.verse.highlighted { background: rgba(201, 151, 58, 0.15); }
+
+.verse:hover {
+  background: var(--parchment-mid);
+}
+
+.verse.highlighted {
+  background: rgba(201, 151, 58, 0.15);
+}
 
 .verse-num {
   font-size: 0.72rem;
@@ -135,5 +151,9 @@ onMounted(() => {
   padding-top: 5px;
   flex-shrink: 0;
 }
-.verse-text { font-size: 1rem; color: var(--ink-mid); }
+
+.verse-text {
+  font-size: 1rem;
+  color: var(--ink-mid);
+}
 </style>
