@@ -69,6 +69,15 @@ export function GetCountOfVersesInTheChapter(book, chapter) {
 }
 
 /**
+ * @returns {$CancellablePromise<string[]>}
+ */
+export function GetListOfTranslationsAvailable() {
+    return $Call.ByID(4195460196).then(/** @type {($result: any) => any} */(($result) => {
+        return $$createType3($result);
+    }));
+}
+
+/**
  * @param {number} id
  * @returns {$CancellablePromise<($models.Note | null)[]>}
  */
@@ -128,8 +137,17 @@ export function GetVerses(version, book, chapter) {
  * @param {string} message
  * @returns {$CancellablePromise<void>}
  */
-export function ShowNotification(title, message) {
-    return $Call.ByID(1671713206, title, message);
+export function ShowError(title, message) {
+    return $Call.ByID(551648961, title, message);
+}
+
+/**
+ * @param {string} title
+ * @param {string} message
+ * @returns {$CancellablePromise<void>}
+ */
+export function ShowWarning(title, message) {
+    return $Call.ByID(2673988031, title, message);
 }
 
 /**

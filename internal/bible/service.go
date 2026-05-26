@@ -15,13 +15,15 @@ func NewBibleService(app *application.App, dataFS fs.FS) *BibleService {
 	bs.bibleBooks = bibleBooks
 	bs.bibleChapters = bibleChapters
 	bs.bibleVerses = bibleVerses
-	bs.translationsAvailable = []string{"KJV"}
+	bs.translationsAvailable = []string{"KJV", "AMP", "CEV", "ESV", "MSG", "NASB", "NIV", "NKJV"}
 	bs.dataFS = dataFS
-	err := bs.importOpenSongBible("data/bibles/KJV.xmm", "KJV")
-	if err != nil {
-		panic(err)
+	for _, t := range bs.translationsAvailable {
+		path := fmt.Sprintf("data/bibles/%s.xmm", t)
+		err := bs.importOpenSongBible(path, t)
+		if err != nil {
+			panic(err)
+		}
 	}
-
 	return bs
 }
 
@@ -91,11 +93,19 @@ func (bs *BibleService) importOpenSongBible(path string, version string) error {
 	return nil
 }
 
-func (bs *BibleService) ShowNotification(title, message string) {
-	infoDialog := bs.app.Dialog.Warning()
-	infoDialog.Title = title
-	infoDialog.Message = message
-	infoDialog.Show()
+func (bs *BibleService) ShowWarning(title, message string) {
+	warningDialog := bs.app.Dialog.Warning()
+	warningDialog.Title = title
+	warningDialog.Message = message
+	warningDialog.Show()
+
+}
+
+func (bs *BibleService) ShowError(title, message string) {
+	errorDialog := bs.app.Dialog.Error()
+	errorDialog.Title = title
+	errorDialog.Message = message
+	errorDialog.Show()
 
 }
 
@@ -105,7 +115,7 @@ type GetVersesResponse struct {
 	// Verses []*Verse1 `json:"verses"`
 }
 
-func (bs *BibleService) isVersionAvailable(v string) bool {
+func (bs *BibleService) isTranslationAvailable(v string) bool {
 	versionAvailable := false
 	for _, ver := range bs.translationsAvailable {
 		if ver == v {
@@ -116,8 +126,12 @@ func (bs *BibleService) isVersionAvailable(v string) bool {
 	return versionAvailable
 }
 
+func (bs *BibleService) GetListOfTranslationsAvailable() []string {
+	return bs.translationsAvailable
+}
+
 func (bs *BibleService) GetVerses(version string, book string, chapter int) ([]*GetVersesResponse, error) {
-	if version == "" || !bs.isVersionAvailable(version) {
+	if version == "" || !bs.isTranslationAvailable(version) {
 		return nil, fmt.Errorf("version of bible not found")
 	}
 	var verses []*GetVersesResponse

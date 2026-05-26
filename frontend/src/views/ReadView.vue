@@ -9,10 +9,12 @@
         <option v-for="c in chapters" :key="c" :value="c">Chapter {{ c }}</option>
       </select>
       <select class="bible-select" @change="updateChaptersAndVerses" v-model="selectedTranslation">
-        <option>KJV</option>
+        <option v-for="(translation, tindex) in listOfTranslationsAvailable" :key="tindex">{{ translation }}</option>
+
+        <!-- <option>KJV</option>
         <option>NIV</option>
         <option>ESV</option>
-        <option>NLT</option>
+        <option>NLT</option> -->
       </select>
     </div>
 
@@ -33,7 +35,7 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import { useUiStore } from '../stores/ui'
-import { GetBooksOfTheBible, GetCountOfChaptersInTheBook, GetVerses, ShowNotification } from '../../bindings/github.com/dailymanna/manna/internal/bible/bibleservice'
+import { GetBooksOfTheBible, GetCountOfChaptersInTheBook, GetListOfTranslationsAvailable, GetVerses, ShowError, ShowWarning } from '../../bindings/github.com/dailymanna/manna/internal/bible/bibleservice'
 import { Application } from '@wailsio/runtime'
 
 const ui = useUiStore()
@@ -42,6 +44,7 @@ const selectedBook = ref('Genesis')
 const selectedChapter = ref(1)
 const selectedTranslation = ref('KJV')
 const defaultTranslation = ref('KJV')
+const listOfTranslationsAvailable = ref([])
 
 // const books    = ['Genesis','Exodus','Psalms','Proverbs','Matthew','John','Romans','Revelation']
 var books = ref([])
@@ -61,17 +64,30 @@ const updateChaptersAndVerses = () => {
       versesInReadView.value = verses
     }).catch((err) => {
       console.log("Error in getting verses:", err)
-      ShowNotification("Bible version not found", `The bible version ${selectedTranslation.value} is not available. Switching to default(${defaultTranslation.value}) version.`)
+      ShowWarning("Bible version not found", `The bible version ${selectedTranslation.value} is not available. Switching to default(${defaultTranslation.value}) version.`)
       selectedTranslation.value = 'KJV'
     })
+  }).catch((err) => {
+    ShowError("Error occured", err)
   })
 }
 
 const fetchReadViewData = () => {
+
+  // Fetch all the available translations
+  GetListOfTranslationsAvailable().then((translations) => {
+    listOfTranslationsAvailable.value = translations
+  }).catch((err) => {
+    ShowError("Error occured", err)
+  })
+
+  // Fetch all the books of the bible
   GetBooksOfTheBible().then((data) => {
     books.value = data
     selectedBook.value = data[0]
     updateChaptersAndVerses()
+  }).catch((err) => {
+    ShowError("Error occured", err)
   })
 }
 
