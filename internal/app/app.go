@@ -62,7 +62,6 @@ func NewMannaApp(cfg *Config) *application.App {
 			TitleBar:                application.MacTitleBarHiddenInset,
 		},
 		BackgroundColour: application.NewRGB(27, 38, 54),
-		Width:            1080,
 		MinWidth:         1080,
 		URL:              "/",
 	})

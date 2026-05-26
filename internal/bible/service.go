@@ -55,7 +55,6 @@ type ImportResult struct {
 }
 
 func (bs *BibleService) Import(f io.Reader, version string) error {
-	fmt.Println("I am here")
 	osb, err := biblepkg.ParseOpenSongBible(f)
 	if err != nil {
 		return err
@@ -63,11 +62,9 @@ func (bs *BibleService) Import(f io.Reader, version string) error {
 	bbl := new(Bible)
 	bbl.Version = version
 	for bkIndex, book := range osb.B {
-		fmt.Printf("Book Name: %s\n", book.N)
 		bk := new(Book)
 		bk.Name = book.N
 		for _, chapter := range book.C {
-			fmt.Printf("Chapter: %s\n", chapter.N)
 			ch := new(Chapter)
 			chNum, _ := strconv.Atoi(chapter.N)
 			ch.Number = chNum
@@ -109,16 +106,13 @@ func (bs *BibleService) isVersionAvailable(v string) bool {
 	for _, ver := range bs.translationsAvailable {
 		if ver == v {
 			versionAvailable = true
-			fmt.Println("Version found")
 			return versionAvailable
 		}
 	}
-	fmt.Println("Version not found")
 	return versionAvailable
 }
 
 func (bs *BibleService) GetVerses(version string, book string, chapter int) ([]*GetVersesResponse, error) {
-	fmt.Println("Version of the bible:", version)
 	if version == "" || !bs.isVersionAvailable(version) {
 		return nil, fmt.Errorf("version of bible not found")
 	}
