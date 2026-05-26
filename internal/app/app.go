@@ -86,6 +86,7 @@ func NewMannaApp(cfg *Config) *application.App {
 	app.RegisterService(application.NewService(bibleSvc))
 
 	m := newMenu(app)
+
 	// Set the application menu
 	app.Menu.Set(m)
 
@@ -100,7 +101,17 @@ func NewMannaApp(cfg *Config) *application.App {
 		Mac: application.MacWindow{
 			InvisibleTitleBarHeight: 50,
 			Backdrop:                application.MacBackdropTranslucent,
-			TitleBar:                application.MacTitleBarHiddenInset,
+			TitleBar: application.MacTitleBar{
+				UseToolbar:                true,
+				AppearsTransparent:        false,
+				Hide:                      false,
+				HideTitle:                 false,
+				FullSizeContent:           false,
+				HideToolbarSeparator:      false,
+				ShowToolbarWhenFullscreen: false,
+				ToolbarStyle:              application.MacToolbarStyleAutomatic,
+			},
+			// TitleBar:                application.MacTitleBarHiddenInset,
 		},
 		BackgroundColour: application.NewRGB(27, 38, 54),
 		MinWidth:         1080,
