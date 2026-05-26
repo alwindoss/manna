@@ -1,13 +1,21 @@
 package app
 
 import (
+	"context"
+	"database/sql"
 	"io/fs"
+	"log"
 	"runtime"
 	"time"
 
 	"github.com/dailymanna/manna/internal/bible"
+	"github.com/pressly/goose/v3"
 
 	"github.com/wailsapp/wails/v3/pkg/application"
+
+	_ "modernc.org/sqlite"
+
+	_ "github.com/dailymanna/manna/migrations"
 )
 
 func init() {
@@ -22,6 +30,23 @@ type Config struct {
 }
 
 func NewMannaApp(cfg *Config) *application.App {
+	db, err := sql.Open("sqlite", "./tmp/manna/data/sqlite.db")
+	if err != nil {
+		log.Fatalf("failed to connect to DB: %v", err)
+	}
+	defer db.Close()
+	if err := goose.SetDialect("sqlite3"); err != nil {
+		log.Fatalf("failed to set goose dialect: %v", err)
+	}
+	goose.SetBaseFS(cfg.FS)
+
+	log.Println("Running database migrations...")
+	if err := goose.UpContext(context.Background(), db, "migrations"); err != nil {
+		log.Fatalf("migration failed: %v", err)
+	}
+
+	log.Println("Migrations completed successfully!")
+
 	// Create a new Wails application by providing the necessary options.
 	// Variables 'Name' and 'Description' are for application metadata.
 	// 'Assets' configures the asset server with the 'FS' variable pointing to the frontend files.
