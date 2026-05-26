@@ -8,10 +8,6 @@ import { Call as $Call, CancellablePromise as $CancellablePromise, Create as $Cr
 
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore: Unused imports
-import * as io$0 from "../../../../../io/models.js";
-
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore: Unused imports
 import * as $models from "./models.js";
 
 /**
@@ -125,15 +121,6 @@ export function GetVerses(version, book, chapter) {
     return $Call.ByID(931891162, version, book, chapter).then(/** @type {($result: any) => any} */(($result) => {
         return $$createType6($result);
     }));
-}
-
-/**
- * @param {io$0.Reader} f
- * @param {string} version
- * @returns {$CancellablePromise<void>}
- */
-export function Import(f, version) {
-    return $Call.ByID(1693328977, f, version);
 }
 
 /**

@@ -5,6 +5,8 @@ import (
 	"database/sql"
 	"io/fs"
 	"log"
+	"os"
+	"path/filepath"
 	"runtime"
 	"time"
 
@@ -30,6 +32,20 @@ type Config struct {
 }
 
 func NewMannaApp(cfg *Config) *application.App {
+	dbPath := "./tmp/manna/data/sqlite.db"
+	appEnv, appEnvfound := os.LookupEnv("APP_ENV")
+	developmentMode := true
+	if !appEnvfound {
+		appEnv = "production"
+		developmentMode = false
+	}
+	log.Printf("Running manna in %s mode", appEnv)
+	if developmentMode {
+		if err := os.MkdirAll(filepath.Dir(dbPath), 0755); err != nil {
+			log.Fatalf("failed to create db directory: %v", err)
+		}
+	}
+
 	db, err := sql.Open("sqlite", "./tmp/manna/data/sqlite.db")
 	if err != nil {
 		log.Fatalf("failed to connect to DB: %v", err)

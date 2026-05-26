@@ -2,7 +2,6 @@ package bible
 
 import (
 	"fmt"
-	"io"
 	"os"
 	"strconv"
 
@@ -17,11 +16,10 @@ func NewBibleService(app *application.App) *BibleService {
 	bs.bibleChapters = bibleChapters
 	bs.bibleVerses = bibleVerses
 	bs.translationsAvailable = []string{"KJV"}
-	f, err := os.Open("./data/bibles/KJV.xmm")
+	err := bs.importOpenSongBible("./data/bibles/KJV.xmm", "KJV")
 	if err != nil {
 		panic(err)
 	}
-	bs.Import(f, "KJV")
 
 	return bs
 }
@@ -54,7 +52,11 @@ func (bs *BibleService) GetCountOfVersesInTheChapter(book string, chapter int) i
 type ImportResult struct {
 }
 
-func (bs *BibleService) Import(f io.Reader, version string) error {
+func (bs *BibleService) importOpenSongBible(path string, version string) error {
+	f, err := os.Open(path)
+	if err != nil {
+		return err
+	}
 	osb, err := biblepkg.ParseOpenSongBible(f)
 	if err != nil {
 		return err
