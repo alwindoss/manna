@@ -30,9 +30,9 @@ func NewMannaApp(cfg *Config) *application.App {
 	app := application.New(application.Options{
 		Name:        "manna",
 		Description: "A demo of using raw HTML & CSS",
-		Services: []application.Service{
-			application.NewService(bible.NewBibleService()),
-		},
+		// Services: []application.Service{
+		// 	application.NewService(bible.NewBibleService()),
+		// },
 		Assets: application.AssetOptions{
 			Handler: application.AssetFileServerFS(cfg.FS),
 		},
@@ -40,6 +40,9 @@ func NewMannaApp(cfg *Config) *application.App {
 			ApplicationShouldTerminateAfterLastWindowClosed: true,
 		},
 	})
+	bibleSvc := bible.NewBibleService(app)
+
+	app.RegisterService(application.NewService(bibleSvc))
 
 	m := newMenu(app)
 	// Set the application menu
@@ -59,6 +62,8 @@ func NewMannaApp(cfg *Config) *application.App {
 			TitleBar:                application.MacTitleBarHiddenInset,
 		},
 		BackgroundColour: application.NewRGB(27, 38, 54),
+		Width:            1080,
+		MinWidth:         1080,
 		URL:              "/",
 	})
 

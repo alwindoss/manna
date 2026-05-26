@@ -7,13 +7,16 @@ import (
 	"strconv"
 
 	biblepkg "github.com/dailymanna/manna/pkg/bible"
+	"github.com/wailsapp/wails/v3/pkg/application"
 )
 
-func NewBibleService() *BibleService {
+func NewBibleService(app *application.App) *BibleService {
 	bs := new(BibleService)
+	bs.app = app
 	bs.bibleBooks = bibleBooks
 	bs.bibleChapters = bibleChapters
 	bs.bibleVerses = bibleVerses
+	bs.translationsAvailable = []string{"KJV"}
 	f, err := os.Open("./data/bibles/KJV.xmm")
 	if err != nil {
 		panic(err)
@@ -24,23 +27,25 @@ func NewBibleService() *BibleService {
 }
 
 type BibleService struct {
-	bibleBooks    []string
-	bibleChapters map[string]int
-	bibleVerses   map[string][]int
-	bibles        []*Bible
-	notes         []Note
+	app                   *application.App
+	bibleBooks            []string
+	bibleChapters         map[string]int
+	bibleVerses           map[string][]int
+	bibles                []*Bible
+	notes                 []Note
+	translationsAvailable []string
 }
 
 func (bs *BibleService) GetBooksOfTheBible() []string {
 	return bs.bibleBooks
 }
 
-func (bs *BibleService) GetChaptersInTheBook(book string) int {
+func (bs *BibleService) GetCountOfChaptersInTheBook(book string) int {
 	c := bibleChapters[book]
 	return c
 }
 
-func (bs *BibleService) GetVersesInTheChapter(book string, chapter int) int {
+func (bs *BibleService) GetCountOfVersesInTheChapter(book string, chapter int) int {
 	b := bibleVerses[book]
 	v := b[chapter-1]
 	return v
@@ -85,17 +90,39 @@ func (bs *BibleService) Import(f io.Reader, version string) error {
 	return nil
 }
 
-type Verse1 struct {
-	Num  string `json:"num"`
-	Text string `json:"text"`
+func (bs *BibleService) ShowNotification(title, message string) {
+	infoDialog := bs.app.Dialog.Warning()
+	infoDialog.Title = title
+	infoDialog.Message = message
+	infoDialog.Show()
+
 }
 
 type GetVersesResponse struct {
-	Verses []*Verse1 `json:"verses"`
+	Num  string `json:"num"`
+	Text string `json:"text"`
+	// Verses []*Verse1 `json:"verses"`
 }
 
-func (bs *BibleService) GetVerses(version string, book string, chapter int) *GetVersesResponse {
-	var verses []*Verse1
+func (bs *BibleService) isVersionAvailable(v string) bool {
+	versionAvailable := false
+	for _, ver := range bs.translationsAvailable {
+		if ver == v {
+			versionAvailable = true
+			fmt.Println("Version found")
+			return versionAvailable
+		}
+	}
+	fmt.Println("Version not found")
+	return versionAvailable
+}
+
+func (bs *BibleService) GetVerses(version string, book string, chapter int) ([]*GetVersesResponse, error) {
+	fmt.Println("Version of the bible:", version)
+	if version == "" || !bs.isVersionAvailable(version) {
+		return nil, fmt.Errorf("version of bible not found")
+	}
+	var verses []*GetVersesResponse
 	for _, bbl := range bs.bibles {
 		if bbl.Version == version {
 			for _, bk := range bbl.Books {
@@ -104,7 +131,7 @@ func (bs *BibleService) GetVerses(version string, book string, chapter int) *Get
 						if chap.Number == chapter {
 							// verses = chap.Verses
 							for i, v := range chap.Verses {
-								gvr := &Verse1{
+								gvr := &GetVersesResponse{
 									Num:  strconv.Itoa(i + 1),
 									Text: v.Text,
 								}
@@ -116,10 +143,7 @@ func (bs *BibleService) GetVerses(version string, book string, chapter int) *Get
 			}
 		}
 	}
-	gvc := &GetVersesResponse{
-		Verses: verses,
-	}
-	return gvc
+	return verses, nil
 }
 
 func (bs *BibleService) AddNote(text string, book, chapter, verse int) error {

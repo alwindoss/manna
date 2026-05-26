@@ -59,8 +59,17 @@ export function GetBooksOfTheBible() {
  * @param {string} book
  * @returns {$CancellablePromise<number>}
  */
-export function GetChaptersInTheBook(book) {
-    return $Call.ByID(3745647489, book);
+export function GetCountOfChaptersInTheBook(book) {
+    return $Call.ByID(2079381295, book);
+}
+
+/**
+ * @param {string} book
+ * @param {number} chapter
+ * @returns {$CancellablePromise<number>}
+ */
+export function GetCountOfVersesInTheChapter(book, chapter) {
+    return $Call.ByID(2023180287, book, chapter);
 }
 
 /**
@@ -110,21 +119,12 @@ export function GetNotesByChapter(book, chapter) {
  * @param {string} version
  * @param {string} book
  * @param {number} chapter
- * @returns {$CancellablePromise<$models.GetVersesResponse | null>}
+ * @returns {$CancellablePromise<($models.GetVersesResponse | null)[]>}
  */
 export function GetVerses(version, book, chapter) {
     return $Call.ByID(931891162, version, book, chapter).then(/** @type {($result: any) => any} */(($result) => {
-        return $$createType5($result);
+        return $$createType6($result);
     }));
-}
-
-/**
- * @param {string} book
- * @param {number} chapter
- * @returns {$CancellablePromise<number>}
- */
-export function GetVersesInTheChapter(book, chapter) {
-    return $Call.ByID(399379689, book, chapter);
 }
 
 /**
@@ -134,6 +134,15 @@ export function GetVersesInTheChapter(book, chapter) {
  */
 export function Import(f, version) {
     return $Call.ByID(1693328977, f, version);
+}
+
+/**
+ * @param {string} title
+ * @param {string} message
+ * @returns {$CancellablePromise<void>}
+ */
+export function ShowNotification(title, message) {
+    return $Call.ByID(1671713206, title, message);
 }
 
 /**
@@ -155,3 +164,4 @@ const $$createType2 = $Create.Array($$createType1);
 const $$createType3 = $Create.Array($Create.Any);
 const $$createType4 = $models.GetVersesResponse.createFrom;
 const $$createType5 = $Create.Nullable($$createType4);
+const $$createType6 = $Create.Array($$createType5);
