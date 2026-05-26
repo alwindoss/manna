@@ -3,7 +3,7 @@ set -e
 
 # Build configuration
 APP_NAME=""
-BUNDLE_ID="com.mycompany.myproduct"
+BUNDLE_ID="com.8ideaz.manna"
 VERSION="0.0.1"
 BUILD_NUMBER="0.0.1"
 BUILD_DIR="build/ios"
