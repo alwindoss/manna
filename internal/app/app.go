@@ -81,7 +81,7 @@ func NewMannaApp(cfg *Config) *application.App {
 			ApplicationShouldTerminateAfterLastWindowClosed: true,
 		},
 	})
-	bibleSvc := bible.NewBibleService(app)
+	bibleSvc := bible.NewBibleService(app, cfg.FS)
 
 	app.RegisterService(application.NewService(bibleSvc))
 

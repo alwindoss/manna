@@ -2,21 +2,22 @@ package bible
 
 import (
 	"fmt"
-	"os"
+	"io/fs"
 	"strconv"
 
 	biblepkg "github.com/dailymanna/manna/pkg/bible"
 	"github.com/wailsapp/wails/v3/pkg/application"
 )
 
-func NewBibleService(app *application.App) *BibleService {
+func NewBibleService(app *application.App, dataFS fs.FS) *BibleService {
 	bs := new(BibleService)
 	bs.app = app
 	bs.bibleBooks = bibleBooks
 	bs.bibleChapters = bibleChapters
 	bs.bibleVerses = bibleVerses
 	bs.translationsAvailable = []string{"KJV"}
-	err := bs.importOpenSongBible("./data/bibles/KJV.xmm", "KJV")
+	bs.dataFS = dataFS
+	err := bs.importOpenSongBible("data/bibles/KJV.xmm", "KJV")
 	if err != nil {
 		panic(err)
 	}
@@ -32,6 +33,7 @@ type BibleService struct {
 	bibles                []*Bible
 	notes                 []Note
 	translationsAvailable []string
+	dataFS                fs.FS
 }
 
 func (bs *BibleService) GetBooksOfTheBible() []string {
@@ -53,7 +55,7 @@ type ImportResult struct {
 }
 
 func (bs *BibleService) importOpenSongBible(path string, version string) error {
-	f, err := os.Open(path)
+	f, err := bs.dataFS.Open(path)
 	if err != nil {
 		return err
 	}
