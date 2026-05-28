@@ -3,7 +3,7 @@
     <div v-for="verse in props.verses" :key="verse.num" class="verse"
         :class="{ highlighted: ui.isVerseHighlighted(verse.num) }" 
         @click="onClickOfVerse(verse.num)"
-        @contextmenu="contextMenuRef?.openMenu($event, verse.num)">
+        @contextmenu="onContextMenuOfVerse($event, verse.num)">
         <span class="verse-num">{{ verse.num }}</span>
         <span class="verse-text">{{ verse.text }}</span>
     </div>
@@ -41,6 +41,11 @@ const onClickOfVerse = (num) => {
   const verseNum = num
   ui.selectVerseHighlight(verseNum)
   emit('verseNumEvent', verseNum)
+}
+
+const onContextMenuOfVerse = (event, verseNum) => {
+  ui.selectVerseHighlight(verseNum)
+  contextMenuRef.value?.openMenu(event, verseNum)
 }
 
 const handleCopyVerse = (verseNum) => {
