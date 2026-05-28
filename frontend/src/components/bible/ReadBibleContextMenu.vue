@@ -6,20 +6,24 @@
     @mouseleave="closeMenu"
   >
     <div class="context-menu-item" @click="handleCopyVerse">
-      <span class="menu-icon">📋</span>
+      <span class="menu-icon"><Copy /></span>
       <span>Copy verse</span>
     </div>
+    <div class="context-menu-item" @click="handleHighlightVerse">
+      <span class="menu-icon"><Highlighter /></span>
+      <span>Highlight</span>
+    </div>
     <div class="context-menu-item" @click="handleShare">
-      <span class="menu-icon">🔗</span>
+      <span class="menu-icon"><Share2 /></span>
       <span>Share</span>
     </div>
     <div class="context-menu-divider"></div>
     <div class="context-menu-item" @click="handleAddBookmark">
-      <span class="menu-icon">🔖</span>
+      <span class="menu-icon"><Star /></span>
       <span>Add bookmark</span>
     </div>
     <div class="context-menu-item" @click="handleCreateNote">
-      <span class="menu-icon">📝</span>
+      <span class="menu-icon"><NotebookPen /></span>
       <span>Create note</span>
     </div>
     <div class="context-menu-divider"></div>
@@ -31,23 +35,25 @@
 </template>
 
 <script setup>
+import { Copy, Highlighter, NotebookPen, Share2, Star } from '@lucide/vue';
 import { ref } from 'vue';
 
 const isVisible = ref(false);
 const position = ref({ x: 0, y: 0 });
-const selectedVerseNum = ref(null);
+const selectedVerse = ref(null);
 
 const emit = defineEmits([
   'copy-verse',
+  'highlight-verse',
   'share',
   'add-bookmark',
   'create-note',
   'report-verse',
 ]);
 
-const openMenu = (event, verseNum) => {
+const openMenu = (event, verse) => {
   event.preventDefault();
-  selectedVerseNum.value = verseNum;
+  selectedVerse.value = verse;
   position.value = {
     x: event.clientX,
     y: event.clientY,
@@ -60,27 +66,32 @@ const closeMenu = () => {
 };
 
 const handleCopyVerse = () => {
-  emit('copy-verse', selectedVerseNum.value);
+  emit('copy-verse', selectedVerse.value);
+  closeMenu();
+};
+
+const handleHighlightVerse = () => {
+  emit('highlight-verse', selectedVerse.value);
   closeMenu();
 };
 
 const handleShare = () => {
-  emit('share', selectedVerseNum.value);
+  emit('share', selectedVerse.value);
   closeMenu();
 };
 
 const handleAddBookmark = () => {
-  emit('add-bookmark', selectedVerseNum.value);
+  emit('add-bookmark', selectedVerse.value);
   closeMenu();
 };
 
 const handleCreateNote = () => {
-  emit('create-note', selectedVerseNum.value);
+  emit('create-note', selectedVerse.value);
   closeMenu();
 };
 
 const handleReport = () => {
-  emit('report-verse', selectedVerseNum.value);
+  emit('report-verse', selectedVerse.value);
   closeMenu();
 };
 

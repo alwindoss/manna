@@ -3,13 +3,14 @@
     <div v-for="verse in props.verses" :key="verse.num" class="verse"
         :class="{ highlighted: ui.isVerseHighlighted(verse.num) }" 
         @click="onClickOfVerse(verse.num)"
-        @contextmenu="onContextMenuOfVerse($event, verse.num)">
+        @contextmenu="onContextMenuOfVerse($event, verse)">
         <span class="verse-num">{{ verse.num }}</span>
         <span class="verse-text">{{ verse.text }}</span>
     </div>
     <ReadBibleContextMenu
       ref="contextMenuRef"
       @copy-verse="handleCopyVerse"
+      @highlight-verse="handleHighlightVerse"
       @share="handleShare"
       @add-bookmark="handleAddBookmark"
       @create-note="handleCreateNote"
@@ -43,29 +44,33 @@ const onClickOfVerse = (num) => {
   emit('verseNumEvent', verseNum)
 }
 
-const onContextMenuOfVerse = (event, verseNum) => {
-  ui.selectVerseHighlight(verseNum)
-  contextMenuRef.value?.openMenu(event, verseNum)
+const onContextMenuOfVerse = (event, verse) => {
+  ui.selectVerseHighlight(verse.num)
+  contextMenuRef.value?.openMenu(event, verse)
 }
 
-const handleCopyVerse = (verseNum) => {
-  console.log('Copy verse:', verseNum);
+const handleCopyVerse = (verse) => {
+  console.log('Copy verse:', verse);
 }
 
-const handleShare = (verseNum) => {
-  console.log('Share verse:', verseNum);
+const handleHighlightVerse = (verse) => {
+  console.log('Highlight verse:', verse);
 }
 
-const handleAddBookmark = (verseNum) => {
-  console.log('Add bookmark:', verseNum);
+const handleShare = (verse) => {
+  console.log('Share verse:', verse);
 }
 
-const handleCreateNote = (verseNum) => {
-  console.log('Create note:', verseNum);
+const handleAddBookmark = (verse) => {
+  console.log('Add bookmark:', verse);
 }
 
-const handleReportVerse = (verseNum) => {
-  console.log('Report verse:', verseNum);
+const handleCreateNote = (verse) => {
+  console.log('Create note:', verse);
+}
+
+const handleReportVerse = (verse) => {
+  console.log('Report verse:', verse);
 }
 
 </script>
