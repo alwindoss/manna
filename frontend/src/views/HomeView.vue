@@ -12,7 +12,7 @@
 
     <div class="home-grid">
       <div class="home-card" @click="router.push({ name: 'read' })">
-        <div class="card-icon">📖</div>
+        <div class="card-icon"><BookOpenText /></div>
         <h3>Continue Reading</h3>
         <p>Genesis · Chapter 3</p>
         <div class="card-progress">
@@ -22,21 +22,21 @@
       </div>
 
       <div class="home-card" @click="router.push({ name: 'notes' })">
-        <div class="card-icon">📝</div>
+        <div class="card-icon"><NotebookPen /></div>
         <h3>Recent Notes</h3>
         <p>3 notes this week</p>
         <div class="card-meta">Last edited · 2h ago</div>
       </div>
 
       <div class="home-card" @click="router.push({ name: 'bookmarks' })">
-        <div class="card-icon">🔖</div>
+        <div class="card-icon"><Star /></div>
         <h3>Bookmarks</h3>
         <p>14 saved passages</p>
         <div class="card-meta">Across 7 books</div>
       </div>
 
       <div class="home-card" @click="router.push({ name: 'plans' })">
-        <div class="card-icon">📅</div>
+        <div class="card-icon"><CalendarDays /></div>
         <h3>Reading Plan</h3>
         <p>Day 42 of 365</p>
         <div class="card-progress">
@@ -54,6 +54,7 @@ import { onMounted } from 'vue';
 import { useRouter } from 'vue-router'
 import HomeRightPanel from '@/components/home/HomeRightPanel.vue';
 import { useUiStore } from '@/stores/ui.js';
+import { BookOpenText, CalendarDays, NotebookPen, Star } from '@lucide/vue';
 const router = useRouter()
 const ui = useUiStore()
 
