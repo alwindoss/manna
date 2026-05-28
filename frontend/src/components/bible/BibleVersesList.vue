@@ -1,8 +1,8 @@
 <template>
     <div v-for="verse in props.verses" :key="verse.num" class="verse"
-        :class="{ highlighted: ui.isVerseHighlighted(verse.num) }" >
+        :class="{ highlighted: ui.isVerseHighlighted(verse.num) }" @click="onClickOfVerse(verse.num)">
         <span class="verse-num">{{ verse.num }}</span>
-        <span class="verse-text" @click="onClickOfVerse(verse.num)">{{ verse.text }}</span>
+        <span class="verse-text">{{ verse.text }}</span>
     </div>
 </template>
 <script setup>

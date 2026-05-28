@@ -55,12 +55,12 @@ var numOfChapters = ref(0)
 var versesInReadView = ref([])
 
 const updateChaptersAndVerses = () => {
-  console.log("Selected Translation:", selectedTranslation.value)
   GetCountOfChaptersInTheBook(selectedBook.value).then((data) => {
     numOfChapters.value = data
     chapters.value = Array.from({ length: data }, (_, i) => i + 1)
     GetVerses(selectedTranslation.value, selectedBook.value, selectedChapter.value).then((verses) => {
-      versesInReadView.value = verses
+      versesInReadView.value = [...verses] // Doing this ensures that the ref variable is updated
+      onVerseClick(selectedVerse.value.num)
     }).catch((err) => {
       console.log("Error in getting verses:", err)
       ShowWarning("Bible version not found", `The bible version ${selectedTranslation.value} is not available. Switching to default(${defaultTranslation.value}) version.`)
@@ -96,6 +96,7 @@ const onVerseClick = (num) => {
     console.warn(`Verse not found: ${num}`)
     return
   }
+  console.log("onVerseClick:Verse", verse)
 
   selectedVerse.value = verse
   ui.setRightPanel(ReadBibleRightPanel, {
