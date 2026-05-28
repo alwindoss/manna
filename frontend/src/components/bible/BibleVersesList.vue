@@ -1,15 +1,29 @@
 <template>
+  <div>
     <div v-for="verse in props.verses" :key="verse.num" class="verse"
-        :class="{ highlighted: ui.isVerseHighlighted(verse.num) }" @click="onClickOfVerse(verse.num)"
-        style="--custom-contextmenu: verse-ctx-menu">
+        :class="{ highlighted: ui.isVerseHighlighted(verse.num) }" 
+        @click="onClickOfVerse(verse.num)"
+        @contextmenu="contextMenuRef?.openMenu($event, verse.num)">
         <span class="verse-num">{{ verse.num }}</span>
         <span class="verse-text">{{ verse.text }}</span>
     </div>
+    <ReadBibleContextMenu
+      ref="contextMenuRef"
+      @copy-verse="handleCopyVerse"
+      @share="handleShare"
+      @add-bookmark="handleAddBookmark"
+      @create-note="handleCreateNote"
+      @report-verse="handleReportVerse"
+    />
+  </div>
 </template>
 <script setup>
+import { ref } from 'vue';
 import { useUiStore } from '@/stores/ui';
+import ReadBibleContextMenu from './ReadBibleContextMenu.vue';
 
-const ui = useUiStore()
+const ui = useUiStore();
+const contextMenuRef = ref(null);
 
 const props = defineProps({
     verses: {
@@ -27,7 +41,26 @@ const onClickOfVerse = (num) => {
   const verseNum = num
   ui.selectVerseHighlight(verseNum)
   emit('verseNumEvent', verseNum)
-  
+}
+
+const handleCopyVerse = (verseNum) => {
+  console.log('Copy verse:', verseNum);
+}
+
+const handleShare = (verseNum) => {
+  console.log('Share verse:', verseNum);
+}
+
+const handleAddBookmark = (verseNum) => {
+  console.log('Add bookmark:', verseNum);
+}
+
+const handleCreateNote = (verseNum) => {
+  console.log('Create note:', verseNum);
+}
+
+const handleReportVerse = (verseNum) => {
+  console.log('Report verse:', verseNum);
 }
 
 </script>
