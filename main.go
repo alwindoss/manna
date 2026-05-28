@@ -6,6 +6,7 @@ import (
 	"log"
 
 	"github.com/dailymanna/manna/internal/app"
+	"github.com/wailsapp/wails/v3/pkg/application"
 )
 
 // Wails uses Go's `embed` package to embed the frontend files into the binary.
@@ -24,6 +25,14 @@ func main() {
 	cfg := new(app.Config)
 	cfg.FS = assets
 	app := app.NewMannaApp(cfg)
+	// Create context menu
+	contextMenu := app.ContextMenu.New()
+	contextMenu.Add("Add Note").OnClick(func(ctx *application.Context) {})
+	contextMenu.Add("Highlight").OnClick(func(ctx *application.Context) {})
+	contextMenu.Add("Bookmark this").OnClick(func(ctx *application.Context) {})
+
+	// Register with ID
+	app.ContextMenu.Add("verse-ctx-menu", contextMenu)
 
 	// Run the application. This blocks until the application has been exited.
 	err := app.Run()

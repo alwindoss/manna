@@ -1,6 +1,7 @@
 <template>
     <div v-for="verse in props.verses" :key="verse.num" class="verse"
         :class="{ highlighted: ui.isVerseHighlighted(verse.num) }" @click="onClickOfVerse(verse.num)">
+        style="--custom-contextmenu: verse-ctx-menu">
         <span class="verse-num">{{ verse.num }}</span>
         <span class="verse-text">{{ verse.text }}</span>
     </div>
