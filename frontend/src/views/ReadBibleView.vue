@@ -40,7 +40,7 @@ const ui = useUiStore()
 
 const selectedBook = ref('Genesis')
 const selectedChapter = ref(1)
-const selectedVerse = ref('No verse selected')
+const selectedVerse = ref({ num: 0, text: 'No verse selected' })
 const selectedTranslation = ref('KJV')
 const defaultTranslation = ref('KJV')
 const listOfTranslationsAvailable = ref([])
@@ -91,8 +91,13 @@ const fetchReadViewData = () => {
 }
 
 const onVerseClick = (num) => {
-  console.log("Selected Verse:", num)
-  selectedVerse.value = versesInReadView.value[num]
+  const verse = versesInReadView.value.find((v) => v.num === num)
+  if (!verse) {
+    console.warn(`Verse not found: ${num}`)
+    return
+  }
+
+  selectedVerse.value = verse
   ui.setRightPanel(ReadBibleRightPanel, {
     title: 'Study Tools',
     book: selectedBook.value,

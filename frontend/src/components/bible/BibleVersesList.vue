@@ -1,8 +1,8 @@
 <template>
     <div v-for="verse in props.verses" :key="verse.num" class="verse"
-        :class="{ highlighted: ui.isVerseHighlighted(verse.num) }" @click="onClickOfVerse(verse.num)">
+        :class="{ highlighted: ui.isVerseHighlighted(verse.num) }" >
         <span class="verse-num">{{ verse.num }}</span>
-        <span class="verse-text">{{ verse.text }}</span>
+        <span class="verse-text" @click="onClickOfVerse(verse.num)">{{ verse.text }}</span>
     </div>
 </template>
 <script setup>
@@ -23,12 +23,12 @@ const emit = defineEmits([
 ])
 
 const onClickOfVerse = (num) => {
-  ui.toggleVerseHighlight(num)
-  emit('verseNumEvent', num)
+  const verseNum = num
+  ui.toggleVerseHighlight(verseNum)
+  emit('verseNumEvent', verseNum)
   
 }
 
-console.log("Verses:", props.verses)
 </script>
 <style lang="css" scoped>
 .verse {

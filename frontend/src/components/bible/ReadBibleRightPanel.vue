@@ -8,6 +8,13 @@
 
         <div class="right-content">
             <div class="rp-section">
+                <div class="rp-section-label">Verse</div>
+                <div class="cross-ref">
+                    <!-- <span class="cross-ref-tag">1</span> -->
+                    <span class="verse-text">{{selectedVerse.text}}</span>
+                </div>
+            </div>
+            <div class="rp-section">
                 <div class="rp-section-label">Cross-References</div>
                 <div class="cross-ref" v-for="ref in crossRefs" :key="ref.ref">
                     <span class="cross-ref-tag">{{ ref.ref }}</span>
@@ -39,6 +46,14 @@
 import { useUiStore } from '@/stores/ui';
 
 const ui = useUiStore()
+
+const props = defineProps({
+    selectedVerse: {
+        type: Object,
+        required: true,
+        default: () => ({ num: 0, text: 'No verse selected' })
+    }
+})
 
 const crossRefs = [
     { ref: 'John 1:1', snippet: '"In the beginning was the Word…"' },
@@ -175,6 +190,12 @@ const origWords = [
     font-style: italic;
 }
 
+/* ── Commentary ─────────────────────────────── */
+.verse-text {
+    font-size: 0.88rem;
+    line-height: 1.7;
+    color: var(--ink-mid);
+}
 /* ── Commentary ─────────────────────────────── */
 .commentary-text {
     font-size: 0.88rem;
