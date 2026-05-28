@@ -21,11 +21,7 @@
     <div class="scripture-body">
       <h2 class="scripture-heading">{{ selectedBook }} · Chapter {{ selectedChapter }}</h2>
       <div class="verses">
-        <div v-for="verse in versesInReadView" :key="verse.num" class="verse"
-          :class="{ highlighted: ui.isVerseHighlighted(verse.num) }" @click="ui.toggleVerseHighlight(verse.num)">
-          <span class="verse-num">{{ verse.num }}</span>
-          <span class="verse-text">{{ verse.text }}</span>
-        </div>
+        <BibleVersesList :verses="versesInReadView"></BibleVersesList>
       </div>
     </div>
 
@@ -34,9 +30,10 @@
 
 <script setup>
 import { onMounted, ref } from 'vue'
-import { useUiStore } from '../stores/ui'
+import { useUiStore } from '@/stores/ui'
 import { GetBooksOfTheBible, GetCountOfChaptersInTheBook, GetListOfTranslationsAvailable, GetVerses, ShowError, ShowWarning } from '../../bindings/github.com/dailymanna/manna/internal/bible/bibleservice'
 import { Application } from '@wailsio/runtime'
+import BibleVersesList from '@/components/bible/BibleVersesList.vue'
 
 const ui = useUiStore()
 
@@ -137,36 +134,5 @@ onMounted(() => {
   letter-spacing: 0.02em;
 }
 
-.verse {
-  display: flex;
-  gap: 14px;
-  padding: 10px 12px;
-  border-radius: 6px;
-  cursor: pointer;
-  line-height: 1.8;
-  transition: background var(--transition);
-}
 
-.verse:hover {
-  background: var(--parchment-mid);
-}
-
-.verse.highlighted {
-  background: rgba(201, 151, 58, 0.15);
-}
-
-.verse-num {
-  font-size: 0.72rem;
-  font-family: sans-serif;
-  color: var(--gold);
-  font-weight: 700;
-  min-width: 20px;
-  padding-top: 5px;
-  flex-shrink: 0;
-}
-
-.verse-text {
-  font-size: 1rem;
-  color: var(--ink-mid);
-}
 </style>
