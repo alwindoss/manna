@@ -212,8 +212,8 @@
 
 <script setup>
 import { BookOpenText, CalendarDays, House, NotebookText, Search, Settings, Star, Wheat } from '@lucide/vue';
-import { useUiStore } from '../stores/ui';
-import { useUserStore } from '../stores/user';
+import { useUiStore } from '@/stores/ui';
+import { useUserStore } from '@/stores/user';
 
 
 const ui = useUiStore()

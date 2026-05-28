@@ -42,8 +42,10 @@
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useUiStore } from './stores/ui'
-import RightPanel from './components/RightPanel.vue'
-import LeftSidebar from './components/LeftSidebar.vue'
+import RightPanel from '@/components/ui/RightPanel.vue'
+import LeftSidebar from '@/components/ui/LeftSidebar.vue'
+// import RightPanel from './components/ui/RightPanel.vue'
+// import LeftSidebar from './components/ui/LeftSidebar.vue'
 // import { useUiStore } from '@/stores/ui'
 
 // import LeftSidebar from '@/components/LeftSidebar.vue'
