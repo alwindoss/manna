@@ -21,7 +21,7 @@
     <div class="scripture-body">
       <h2 class="scripture-heading">{{ selectedBook }} · Chapter {{ selectedChapter }}</h2>
       <div class="verses">
-        <BibleVersesList :verses="versesInReadView"></BibleVersesList>
+        <BibleVersesList :verses="versesInReadView" @verseNumEvent="onVerseClick"></BibleVersesList>
       </div>
     </div>
 
@@ -34,11 +34,13 @@ import { useUiStore } from '@/stores/ui'
 import { GetBooksOfTheBible, GetCountOfChaptersInTheBook, GetListOfTranslationsAvailable, GetVerses, ShowError, ShowWarning } from '../../bindings/github.com/dailymanna/manna/internal/bible/bibleservice'
 import { Application } from '@wailsio/runtime'
 import BibleVersesList from '@/components/bible/BibleVersesList.vue'
+import ReadBibleRightPanel from '../components/bible/ReadBibleRightPanel.vue'
 
 const ui = useUiStore()
 
 const selectedBook = ref('Genesis')
 const selectedChapter = ref(1)
+const selectedVerse = ref('No verse selected')
 const selectedTranslation = ref('KJV')
 const defaultTranslation = ref('KJV')
 const listOfTranslationsAvailable = ref([])
@@ -50,7 +52,7 @@ var chapters = ref([])
 
 var numOfChapters = ref(0)
 
-const versesInReadView = ref([])
+var versesInReadView = ref([])
 
 const updateChaptersAndVerses = () => {
   console.log("Selected Translation:", selectedTranslation.value)
@@ -88,8 +90,36 @@ const fetchReadViewData = () => {
   })
 }
 
+const onVerseClick = (num) => {
+  console.log("Selected Verse:", num)
+  selectedVerse.value = versesInReadView.value[num]
+  ui.setRightPanel(ReadBibleRightPanel, {
+    title: 'Study Tools',
+    book: selectedBook.value,
+    chapter: selectedChapter.value,
+    selectedVerse: selectedVerse.value,   // live data from center → right
+  })
+}
+
+// Update panel when user selects a verse
+// function onVerseClick(verse) {
+//   ui.setRightPanel(VerseStudyPanel, {
+//     title: 'Study Tools',
+//     book: selectedBook.value,
+//     chapter: selectedChapter.value,
+//     selectedVerse: selectedVerse.value,   // live data from center → right
+//   })
+// }
+
 onMounted(() => {
   fetchReadViewData()
+
+  ui.setRightPanel(ReadBibleRightPanel, {
+    title: 'Study Tools',
+    book: selectedBook.value,
+    chapter: selectedChapter.value,
+    selectedVerse: selectedVerse.value,   // live data from center → right
+  })
 })
 </script>
 
@@ -133,6 +163,4 @@ onMounted(() => {
   border-bottom: 1px solid var(--border-light);
   letter-spacing: 0.02em;
 }
-
-
 </style>

@@ -1,24 +1,25 @@
 <template>
   <div class="view-placeholder">
-    <div class="placeholder-icon">🔖</div>
-    <h2>Bookmarks</h2>
+    <div class="placeholder-icon"><CalendarDays /></div>
+    <h2>Plans</h2>
     <p>This section is under construction.</p>
   </div>
 </template>
 
 <script setup>
 import { useRoute } from 'vue-router'
-import PlaceholderRightPanel from '../components/ui/PlaceholderRightPanel.vue';
 import { onMounted } from 'vue';
+import { useUiStore } from '@/stores/ui'
+import PlansRightPanel from '@/components/plans/PlansRightPanel.vue';
+import { CalendarDays } from '@lucide/vue';
 
 const route = useRoute()
-import { useUiStore } from '@/stores/ui'
 
 const ui = useUiStore()
 
 onMounted(() => {
-  ui.setRightPanel(PlaceholderRightPanel, {
-    title: 'Placeholder Panel',
+  ui.setRightPanel(PlansRightPanel, {
+    title: 'Plans',
   })
 
 })

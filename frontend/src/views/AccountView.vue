@@ -1,24 +1,25 @@
 <template>
   <div class="view-placeholder">
-    <div class="placeholder-icon">🔖</div>
-    <h2>Bookmarks</h2>
+    <div class="placeholder-icon"><User /></div>
+    <h2>Account</h2>
     <p>This section is under construction.</p>
   </div>
 </template>
 
 <script setup>
 import { useRoute } from 'vue-router'
-import PlaceholderRightPanel from '../components/ui/PlaceholderRightPanel.vue';
 import { onMounted } from 'vue';
+import { useUiStore } from '@/stores/ui'
+import AccountRightPanel from '@/components/account/AccountRightPanel.vue';
+import { User } from '@lucide/vue';
 
 const route = useRoute()
-import { useUiStore } from '@/stores/ui'
 
 const ui = useUiStore()
 
 onMounted(() => {
-  ui.setRightPanel(PlaceholderRightPanel, {
-    title: 'Placeholder Panel',
+  ui.setRightPanel(AccountRightPanel, {
+    title: 'Account',
   })
 
 })

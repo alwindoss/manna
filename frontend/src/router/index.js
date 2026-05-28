@@ -1,9 +1,14 @@
 // src/router/index.js
 import { createRouter, createWebHashHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
-import NotesView from '../views/NotesView.vue'
-import PlaceholderView from '../views/PlaceholderView.vue'
-import ReadBibleView from '../views/ReadBibleView.vue'
+import HomeView from '@/views/HomeView.vue'
+import NotesView from '@/views/NotesView.vue'
+import PlaceholderView from '@/views/PlaceholderView.vue'
+import ReadBibleView from '@/views/ReadBibleView.vue'
+import PlansView from '@/views/PlansView.vue'
+import SearchView from '@/views/SearchView.vue'
+import SettingsView from '@/views/SettingsView.vue'
+import AccountView from '@/views/AccountView.vue'
+import BookmarksView from '../views/BookmarksView.vue'
 
 
 const routes = [
@@ -32,31 +37,31 @@ const routes = [
   {
     path: '/bookmarks',
     name: 'bookmarks',
-    component: PlaceholderView,
+    component: BookmarksView,
     meta: { title: 'Bookmarks', subtitle: 'Saved passages', icon: '🔖' },
   },
   {
     path: '/plans',
     name: 'plans',
-    component: PlaceholderView,
+    component: PlansView,
     meta: { title: 'Reading Plans', subtitle: 'Stay on track', icon: '📅' },
   },
   {
     path: '/search',
     name: 'search',
-    component: PlaceholderView,
+    component: SearchView,
     meta: { title: 'Search Scripture', subtitle: 'Find any passage', icon: '⌕' },
   },
   {
     path: '/settings',
     name: 'settings',
-    component: PlaceholderView,
+    component: SettingsView,
     meta: { title: 'Settings', subtitle: 'Preferences & display', icon: '⚙' },
   },
   {
     path: '/profile',
     name: 'profile',
-    component: PlaceholderView,
+    component: AccountView,
     meta: { title: 'Profile', subtitle: 'Your account', icon: '👤' },
   },
   // Catch-all → home

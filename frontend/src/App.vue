@@ -41,7 +41,7 @@
 <script setup>
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
-import { useUiStore } from './stores/ui'
+import { useUiStore } from '@/stores/ui'
 import RightPanel from '@/components/ui/RightPanel.vue'
 import LeftSidebar from '@/components/ui/LeftSidebar.vue'
 // import RightPanel from './components/ui/RightPanel.vue'

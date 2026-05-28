@@ -31,8 +31,9 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useUiStore } from '../stores/ui'
+import NotesRightPanel from '../components/notes/NotesRightPanel.vue'
 
 const ui    = useUiStore()
 const query = ref('')
@@ -70,6 +71,21 @@ const filteredNotes = computed(() => {
          n.preview.toLowerCase().includes(q)
   )
 })
+
+onMounted(() => {
+  ui.setRightPanel(NotesRightPanel, {
+    title: 'Note Detail',
+  })
+
+})
+
+function onNoteSelect(note) {
+  ui.setSelectedNote(note)
+  ui.setRightPanel(NotesRightPanel, {
+    title: note.title,
+    note,                   // the full note object flows into the panel
+  })
+}
 </script>
 
 <style scoped>

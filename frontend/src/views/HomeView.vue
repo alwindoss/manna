@@ -50,8 +50,22 @@
 </template>
 
 <script setup>
+import { onMounted } from 'vue';
 import { useRouter } from 'vue-router'
+import HomeRightPanel from '@/components/home/HomeRightPanel.vue';
+import { useUiStore } from '@/stores/ui.js';
 const router = useRouter()
+const ui = useUiStore()
+
+onMounted(() => {
+  ui.setRightPanel(HomeRightPanel, {
+    title: 'Today',
+    // book: selectedBook.value,
+    // chapter: selectedChapter.value,
+    // selectedVerse: verse,   // live data from center → right
+  })
+})
+
 </script>
 
 <style scoped>
