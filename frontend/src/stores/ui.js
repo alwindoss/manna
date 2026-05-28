@@ -37,21 +37,19 @@ export const useUiStore = defineStore('ui', () => {
   function clearSelectedNote() { selectedNote.value = null }
 
   // ── Selected verse (shared between Read view & RightPanel) ──
-  const highlightedVerses = ref([])
-  function toggleVerseHighlight(verseNum) {
-    const idx = highlightedVerses.value.indexOf(verseNum)
-    if (idx === -1) highlightedVerses.value.push(verseNum)
-    else highlightedVerses.value.splice(idx, 1)
+  const highlightedVerse = ref(null)
+  function selectVerseHighlight(verseNum) {
+    highlightedVerse.value = verseNum
   }
   const isVerseHighlighted = computed(
-    () => (num) => highlightedVerses.value.includes(num)
+    () => (num) => highlightedVerse.value === num
   )
 
   return {
     sidebarCollapsed, toggleSidebar,
     rightPanelOpen, toggleRightPanel, openRightPanel, closeRightPanel,
     selectedNote, setSelectedNote, clearSelectedNote,
-    highlightedVerses, toggleVerseHighlight, isVerseHighlighted,
+    highlightedVerse, selectVerseHighlight, isVerseHighlighted,
     rightPanelContext, setRightPanel, clearRightPanel,
   }
 })

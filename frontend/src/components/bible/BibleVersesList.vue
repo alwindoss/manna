@@ -24,7 +24,7 @@ const emit = defineEmits([
 
 const onClickOfVerse = (num) => {
   const verseNum = num
-  ui.toggleVerseHighlight(verseNum)
+  ui.selectVerseHighlight(verseNum)
   emit('verseNumEvent', verseNum)
   
 }
