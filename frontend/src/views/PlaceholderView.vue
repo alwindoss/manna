@@ -7,8 +7,8 @@
 </template>
 
 <script setup>
+import PlaceholderRightPanel from '@/components/ui/PlaceholderRightPanel.vue';
 import { useRoute } from 'vue-router'
-import PlaceholderRightPanel from '../components/ui/PlaceholderRightPanel.vue';
 import { onMounted } from 'vue';
 
 const route = useRoute()

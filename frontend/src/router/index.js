@@ -8,7 +8,7 @@ import PlansView from '@/views/PlansView.vue'
 import SearchView from '@/views/SearchView.vue'
 import SettingsView from '@/views/SettingsView.vue'
 import AccountView from '@/views/AccountView.vue'
-import BookmarksView from '../views/BookmarksView.vue'
+import BookmarksView from '@/views/BookmarksView.vue'
 
 
 const routes = [

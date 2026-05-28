@@ -32,8 +32,8 @@
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
-import { useUiStore } from '../stores/ui'
-import NotesRightPanel from '../components/notes/NotesRightPanel.vue'
+import { useUiStore } from '@/stores/ui'
+import NotesRightPanel from '@/components/notes/NotesRightPanel.vue'
 
 const ui    = useUiStore()
 const query = ref('')

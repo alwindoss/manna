@@ -36,9 +36,9 @@
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useUiStore } from '@/stores/ui'
-import ReadBibleRightPanel from '../bible/ReadBibleRightPanel.vue'
-import NotesRightPanel from '../notes/NotesRightPanel.vue'
-import HomeRightPanel from '../home/HomeRightPanel.vue'
+import ReadBibleRightPanel from '@/components/bible/ReadBibleRightPanel.vue'
+import NotesRightPanel from '@/components/notes/NotesRightPanel.vue'
+import HomeRightPanel from '@/components/home/HomeRightPanel.vue'
 
 const ui    = useUiStore()
 const route = useRoute()
