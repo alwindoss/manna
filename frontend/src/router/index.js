@@ -1,9 +1,9 @@
 // src/router/index.js
 import { createRouter, createWebHashHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-import ReadView from '../views/ReadView.vue'
 import NotesView from '../views/NotesView.vue'
 import PlaceholderView from '../views/PlaceholderView.vue'
+import ReadBibleView from '../views/ReadBibleView.vue'
 
 
 const routes = [
@@ -20,7 +20,7 @@ const routes = [
   {
     path: '/read',
     name: 'read',
-    component: ReadView,
+    component: ReadBibleView,
     meta: { title: 'Read the Bible', subtitle: 'Explore Scripture', icon: '📖' },
   },
   {

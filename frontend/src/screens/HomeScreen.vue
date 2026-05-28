@@ -1,3 +1,0 @@
-<template>
-    <h1>This is the home screen</h1>
-</template>
