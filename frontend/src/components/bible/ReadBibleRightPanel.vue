@@ -15,11 +15,15 @@
                 </div>
             </div>
             <div class="rp-section">
-                <div class="rp-section-label">Cross-References</div>
-                <div class="cross-ref" v-for="ref in crossRefs" :key="ref.ref">
+                <div class="rp-section-label" @click="printy">Cross-References</div>
+                <div class="cross-ref" v-for="refer in crossReferences" :key="refer.id">
+                    <span class="cross-ref-text">{{ refer.to_book }} {{ refer.to_chapter }}:{{ refer.to_verse_start }}-{{ refer.to_verse_end }}</span>
+                    <!-- <span class="cross-ref-text">{{ ref.snippet }}</span> -->
+                </div>
+                <!-- <div class="cross-ref" v-for="ref in crossRefs" :key="ref.ref">
                     <span class="cross-ref-tag">{{ ref.ref }}</span>
                     <span class="cross-ref-text">{{ ref.snippet }}</span>
-                </div>
+                </div> -->
             </div>
 
             <div class="rp-section">
@@ -30,7 +34,6 @@
                     creation account and the tabernacle instructions.
                 </p>
             </div>
-
             <div class="rp-section">
                 <div class="rp-section-label">Original Language</div>
                 <div class="orig-word" v-for="w in origWords" :key="w.word">
@@ -52,14 +55,23 @@ const props = defineProps({
         type: Object,
         required: true,
         default: () => ({ num: 0, text: 'No verse selected' })
+    },
+    crossReferences: {
+        type: Array,
+        required: true,
+        default: () => []
     }
 })
 
-const crossRefs = [
-    { ref: 'John 1:1', snippet: '"In the beginning was the Word…"' },
-    { ref: 'Heb 11:3', snippet: 'By faith we understand the universe was created…' },
-    { ref: 'Col 1:16', snippet: 'For in him all things were created…' },
-]
+const printy = () => {
+    console.log("Cross References: ", props.crossReferences)
+}
+
+// const crossRefs = [
+//     { ref: 'John 1:1', snippet: '"In the beginning was the Word…"' },
+//     { ref: 'Heb 11:3', snippet: 'By faith we understand the universe was created…' },
+//     { ref: 'Col 1:16', snippet: 'For in him all things were created…' },
+// ]
 const origWords = [
     { word: 'בְּרֵאשִׁית', meaning: "b'reshit — In the beginning" },
     { word: 'בָּרָא', meaning: 'bara — created (divine act)' },

@@ -16,7 +16,7 @@ export const useUiStore = defineStore('ui', () => {
     props: {}          // data to pass into it
   })
 
-  function setRightPanel(component, props = {}) {
+  async function setRightPanel(component, props = {}) {
     rightPanelContext.value = { component: markRaw(component), props }
   }
   function clearRightPanel() {

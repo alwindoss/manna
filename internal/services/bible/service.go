@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"io/fs"
+	"log"
 	"strconv"
 
 	biblepkg "github.com/dailymanna/manna/pkg/bible"
@@ -45,6 +46,46 @@ type BibleService struct {
 	translationsAvailable []string
 	dataFS                fs.FS
 	db                    *sql.DB
+}
+
+type GetCrossReferencesResult struct {
+	References []*Reference `json:"references"`
+}
+
+type Reference struct {
+	ID           int    `json:"id"`
+	FromBook     string `json:"from_book"`
+	FromChapter  int    `json:"from_chapter"`
+	FromVerse    int    `json:"from_verse"`
+	ToBook       string `json:"to_book"`
+	ToChapter    int    `json:"to_chapter"`
+	ToVerseStart int    `json:"to_verse_start"`
+	ToVerseEnd   int    `json:"to_verse_end"`
+	Votes        int    `json:"votes"`
+}
+
+func (bs *BibleService) GetCrossReferences(book string, chapterNum, verseNum int) (*GetCrossReferencesResult, error) {
+	tableName := "cross_references"
+	query := fmt.Sprintf("select * from %s where from_book = ? AND from_chapter = ? AND from_verse = ?;", tableName)
+	rows, err := bs.db.Query(query, book, chapterNum, verseNum)
+	if err != nil {
+		log.Printf("Error when querying: %v", err)
+		return nil, err
+	}
+	var refs []*Reference
+	for rows.Next() {
+		ref := new(Reference)
+		err := rows.Scan(&ref.ID, &ref.FromBook, &ref.FromChapter, &ref.FromVerse, &ref.ToBook, &ref.ToChapter, &ref.ToVerseStart, &ref.ToVerseEnd, &ref.Votes)
+		if err != nil {
+			log.Printf("error when scanning the results from table %s: %v", tableName, err)
+			continue
+		}
+		refs = append(refs, ref)
+	}
+	result := &GetCrossReferencesResult{
+		References: refs,
+	}
+	return result, nil
 }
 
 func (bs *BibleService) GetBooksOfTheBible() []string {

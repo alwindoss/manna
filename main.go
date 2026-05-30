@@ -1,9 +1,13 @@
 package main
 
 import (
+	"database/sql"
 	"embed"
 	_ "embed"
+	"fmt"
 	"log"
+	"os"
+	"path/filepath"
 
 	"github.com/dailymanna/manna/internal/app"
 	"github.com/wailsapp/wails/v3/pkg/application"
@@ -22,8 +26,29 @@ var assets embed.FS
 // logs any error that might occur.
 func main() {
 
+	dbPath := "./tmp/manna/data/manna.db"
+	appEnv, appEnvfound := os.LookupEnv("APP_ENV")
+	developmentMode := true
+	if !appEnvfound {
+		appEnv = "production"
+		developmentMode = false
+	}
+	log.Printf("Running manna in %s mode", appEnv)
+	if developmentMode {
+		if err := os.MkdirAll(filepath.Dir(dbPath), 0755); err != nil {
+			log.Fatalf("failed to create db directory: %v", err)
+		}
+	}
+	dbPathWithOptions := fmt.Sprintf("%s?_pragma=journal_mode(WAL)&_pragma=synchronous(NORMAL)&_pragma=cache_size(-64000)", dbPath)
+	db, err := sql.Open("sqlite", dbPathWithOptions)
+	if err != nil {
+		log.Fatalf("failed to connect to DB: %v", err)
+	}
+	defer db.Close()
+
 	cfg := new(app.Config)
 	cfg.FS = assets
+	cfg.DB = db
 	app := app.NewMannaApp(cfg)
 	// Create context menu
 	contextMenu := app.ContextMenu.New()
@@ -35,7 +60,7 @@ func main() {
 	app.ContextMenu.Add("verse-ctx-menu", contextMenu)
 
 	// Run the application. This blocks until the application has been exited.
-	err := app.Run()
+	err = app.Run()
 
 	// If an error occurred while running the application, log it and exit.
 	if err != nil {

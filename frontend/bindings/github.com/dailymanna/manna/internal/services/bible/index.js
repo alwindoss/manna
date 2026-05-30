@@ -8,7 +8,9 @@ export {
 };
 
 export {
+    GetCrossReferencesResult,
     GetVersesResponse,
     Note,
+    Reference,
     VerseKey
 } from "./models.js";

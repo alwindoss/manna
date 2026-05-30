@@ -3,11 +3,8 @@ package app
 import (
 	"context"
 	"database/sql"
-	"fmt"
 	"io/fs"
 	"log"
-	"os"
-	"path/filepath"
 	"runtime"
 	"time"
 
@@ -30,35 +27,18 @@ func init() {
 
 type Config struct {
 	FS fs.FS
+	DB *sql.DB
 }
 
 func NewMannaApp(cfg *Config) *application.App {
-	dbPath := "./tmp/manna/data/manna.db"
-	appEnv, appEnvfound := os.LookupEnv("APP_ENV")
-	developmentMode := true
-	if !appEnvfound {
-		appEnv = "production"
-		developmentMode = false
-	}
-	log.Printf("Running manna in %s mode", appEnv)
-	if developmentMode {
-		if err := os.MkdirAll(filepath.Dir(dbPath), 0755); err != nil {
-			log.Fatalf("failed to create db directory: %v", err)
-		}
-	}
-	dbPathWithOptions := fmt.Sprintf("%s?_pragma=journal_mode(WAL)&_pragma=synchronous(NORMAL)&_pragma=cache_size(-64000)", dbPath)
-	db, err := sql.Open("sqlite", dbPathWithOptions)
-	if err != nil {
-		log.Fatalf("failed to connect to DB: %v", err)
-	}
-	defer db.Close()
+
 	if err := goose.SetDialect("sqlite3"); err != nil {
 		log.Fatalf("failed to set goose dialect: %v", err)
 	}
 	goose.SetBaseFS(cfg.FS)
 
 	log.Println("Running database migrations...")
-	if err := goose.UpContext(context.Background(), db, "migrations"); err != nil {
+	if err := goose.UpContext(context.Background(), cfg.DB, "migrations"); err != nil {
 		log.Fatalf("migration failed: %v", err)
 	}
 
@@ -85,7 +65,7 @@ func NewMannaApp(cfg *Config) *application.App {
 	bibleSvcCfg := &bible.BibleServiceConfig{
 		App:    app,
 		DataFS: cfg.FS,
-		DB:     db,
+		DB:     cfg.DB,
 	}
 	bibleSvc := bible.NewBibleService(bibleSvcCfg)
 

@@ -69,6 +69,18 @@ export function GetCountOfVersesInTheChapter(book, chapter) {
 }
 
 /**
+ * @param {string} book
+ * @param {number} chapterNum
+ * @param {number} verseNum
+ * @returns {$CancellablePromise<$models.GetCrossReferencesResult | null>}
+ */
+export function GetCrossReferences(book, chapterNum, verseNum) {
+    return $Call.ByID(3935083199, book, chapterNum, verseNum).then(/** @type {($result: any) => any} */(($result) => {
+        return $$createType5($result);
+    }));
+}
+
+/**
  * @returns {$CancellablePromise<string[]>}
  */
 export function GetListOfTranslationsAvailable() {
@@ -128,7 +140,7 @@ export function GetNotesByChapter(book, chapter) {
  */
 export function GetVerses(version, book, chapter) {
     return $Call.ByID(1005662017, version, book, chapter).then(/** @type {($result: any) => any} */(($result) => {
-        return $$createType6($result);
+        return $$createType8($result);
     }));
 }
 
@@ -167,6 +179,8 @@ const $$createType0 = $models.Note.createFrom;
 const $$createType1 = $Create.Nullable($$createType0);
 const $$createType2 = $Create.Array($$createType1);
 const $$createType3 = $Create.Array($Create.Any);
-const $$createType4 = $models.GetVersesResponse.createFrom;
+const $$createType4 = $models.GetCrossReferencesResult.createFrom;
 const $$createType5 = $Create.Nullable($$createType4);
-const $$createType6 = $Create.Array($$createType5);
+const $$createType6 = $models.GetVersesResponse.createFrom;
+const $$createType7 = $Create.Nullable($$createType6);
+const $$createType8 = $Create.Array($$createType7);

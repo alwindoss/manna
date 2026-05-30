@@ -38,7 +38,7 @@ func (ss *SettingsService) SetupOfflineCrossReferences() error {
 	if !ss.IsTableEmpty(tableName) {
 		return fmt.Errorf("The table %s already has data", tableName)
 	}
-	crURL := "https://github.com/dailymanna/database/releases/download/v0.0.1-alpha1/cross_references.zip"
+	crURL := "https://github.com/dailymanna/database/releases/download/v0.0.1-alpha3/cross_references.zip"
 	resp, err := http.Get(crURL)
 	if err != nil {
 		return err
@@ -95,12 +95,12 @@ func (ss *SettingsService) SetupOfflineCrossReferences() error {
 func (ss *SettingsService) IsTableEmpty(tableName string) bool {
 	tableIsEmpty := true
 	var exists int
-	checkQuery := "SELECT 1 FROM cross_references LIMIT 1;"
+	checkQuery := fmt.Sprintf("SELECT 1 FROM %s LIMIT 1;", tableName)
 
 	// QueryRowContext automatically manages timeouts if passed from your HTTP/main handler
 	err := ss.db.QueryRow(checkQuery).Scan(&exists)
 	if err == nil {
-		log.Println("Table 'cross_references' already has data. Skipping download and execution to prevent duplicates.")
+		log.Printf("Table '%s' already has data. Skipping download and execution to prevent duplicates.", tableName)
 		tableIsEmpty = false
 		return tableIsEmpty
 	}
@@ -113,6 +113,10 @@ func (ss *SettingsService) executeSQLiteStream(sqlStream io.Reader) error {
 
 	// 8MB threshold keeps RAM flat while sending thousands of insert lines at a time
 	const maxChunkSize = 8 * 1024 * 1024
+	tx, err := ss.db.Begin()
+	if err != nil {
+		log.Fatal(err)
+	}
 	lineNum := 0
 	for scanner.Scan() {
 		line := strings.TrimSpace(scanner.Text())
@@ -133,7 +137,7 @@ func (ss *SettingsService) executeSQLiteStream(sqlStream io.Reader) error {
 			queryChunk := chunkBuilder.String()
 			chunkBuilder.Reset()
 			// Execute directly on ss.db because the SQL file manages its own BEGIN/COMMIT
-			_, err := ss.db.Exec(queryChunk)
+			_, err := tx.Exec(queryChunk)
 			if err != nil {
 				return fmt.Errorf("failed to execute SQL chunk: %w", err)
 			}
@@ -142,7 +146,7 @@ func (ss *SettingsService) executeSQLiteStream(sqlStream io.Reader) error {
 
 	// Flush any remaining INSERT statements left in the buffer
 	if chunkBuilder.Len() > 0 {
-		_, err := ss.db.Exec(chunkBuilder.String())
+		_, err := tx.Exec(chunkBuilder.String())
 		if err != nil {
 			return fmt.Errorf("failed to execute final SQL chunk: %w", err)
 		}
@@ -151,6 +155,10 @@ func (ss *SettingsService) executeSQLiteStream(sqlStream io.Reader) error {
 	// Catch any internal reading or streaming errors
 	if err := scanner.Err(); err != nil {
 		return fmt.Errorf("error reading dump stream: %w", err)
+	}
+	err = tx.Commit()
+	if err != nil {
+		log.Fatal(err)
 	}
 
 	return nil

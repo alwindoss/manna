@@ -31,90 +31,101 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import { useUiStore } from '@/stores/ui'
-import { GetBooksOfTheBible, GetCountOfChaptersInTheBook, GetListOfTranslationsAvailable, GetVerses, ShowError, ShowWarning } from '@@/bindings/github.com/dailymanna/manna/internal/services/bible/bibleservice'
+import { GetCrossReferences, GetBooksOfTheBible, GetCountOfChaptersInTheBook, GetListOfTranslationsAvailable, GetVerses, ShowError, ShowWarning } from '@@/bindings/github.com/dailymanna/manna/internal/services/bible/bibleservice'
 import { Application } from '@wailsio/runtime'
 import BibleVersesList from '@/components/bible/BibleVersesList.vue'
 import ReadBibleRightPanel from '@/components/bible/ReadBibleRightPanel.vue'
 
 const ui = useUiStore()
 
-const selectedBook = ref('Genesis')
-const selectedChapter = ref(1)
-const selectedVerse = ref({ num: 0, text: 'No verse selected' })
-const selectedTranslation = ref('KJV')
-const defaultTranslation = ref('KJV')
-const listOfTranslationsAvailable = ref([])
+let selectedBook = ref('Genesis')
+let selectedChapter = ref(1)
+let selectedVerse = ref({ num: 0, text: 'No verse selected' })
+let selectedTranslation = ref('KJV')
+let defaultTranslation = ref('KJV')
+let listOfTranslationsAvailable = ref([])
 
 // const books    = ['Genesis','Exodus','Psalms','Proverbs','Matthew','John','Romans','Revelation']
-var books = ref([])
+let books = ref([])
 // const chapters = Array.from({ length: 50 }, (_, i) => i + 1)
-var chapters = ref([])
+let chapters = ref([])
 
-var numOfChapters = ref(0)
+let numOfChapters = ref(0)
 
-var versesInReadView = ref([])
+let versesInReadView = ref([])
 
-const updateChaptersAndVerses = () => {
-  GetCountOfChaptersInTheBook(selectedBook.value).then((data) => {
+let crossReferences = ref([])
+
+
+
+const updateChaptersAndVerses = async () => {
+  await GetCountOfChaptersInTheBook(selectedBook.value).then(async (data) => {
     numOfChapters.value = data
     chapters.value = Array.from({ length: data }, (_, i) => i + 1)
-    GetVerses(selectedTranslation.value, selectedBook.value, selectedChapter.value).then((verses) => {
+    await GetVerses(selectedTranslation.value, selectedBook.value, selectedChapter.value).then(async (verses) => {
       versesInReadView.value = [...verses] // Doing this ensures that the ref variable is updated
-      onVerseClick(selectedVerse.value.num)
-    }).catch((err) => {
+      await onVerseClick(selectedVerse.value.num)
+    }).catch(async (err) => {
       console.log("Error in getting verses:", err)
-      ShowWarning("Bible version not found", `The bible version ${selectedTranslation.value} is not available. Switching to default(${defaultTranslation.value}) version.`)
+      await ShowWarning("Bible version not found", `The bible version ${selectedTranslation.value} is not available. Switching to default(${defaultTranslation.value}) version.`)
       selectedTranslation.value = 'KJV'
     })
-  }).catch((err) => {
-    ShowError("Error occured", err)
+  }).catch(async (err) => {
+    await ShowError("Error occured", err)
   })
 }
 
-const fetchReadViewData = () => {
+const fetchReadViewData = async () => {
 
   // Fetch all the available translations
-  GetListOfTranslationsAvailable().then((translations) => {
+  await GetListOfTranslationsAvailable().then((translations) => {
     listOfTranslationsAvailable.value = translations
-  }).catch((err) => {
-    ShowError("Error occured", err)
+  }).catch(async (err) => {
+    await ShowError("Error occured", err)
   })
 
   // Fetch all the books of the bible
-  GetBooksOfTheBible().then((data) => {
+  await GetBooksOfTheBible().then(async (data) => {
     books.value = data
     selectedBook.value = data[0]
-    updateChaptersAndVerses()
-  }).catch((err) => {
-    ShowError("Error occured", err)
+    await updateChaptersAndVerses()
+  }).catch(async (err) => {
+    await ShowError("Error occured", err)
   })
 }
 
-const onVerseClick = (num) => {
+const onVerseClick = async (num) => {
   const verse = versesInReadView.value.find((v) => v.num === num)
   if (!verse) {
     console.warn(`Verse not found: ${num}`)
     return
   }
-  console.log("onVerseClick:Verse", verse)
-
   selectedVerse.value = verse
-  ui.setRightPanel(ReadBibleRightPanel, {
+  
+  await GetCrossReferences(selectedBook.value, selectedChapter.value, Number(selectedVerse.value.num)).then((result) => {
+    crossReferences.value = result.references
+    console.log("References:", crossReferences)
+  }).catch(async (err) => {
+    console.log("No cross references found")
+  })
+  await ui.setRightPanel(ReadBibleRightPanel, {
     title: 'Study Tools',
     book: selectedBook.value,
     chapter: selectedChapter.value,
     selectedVerse: selectedVerse.value,   // live data from center → right
+    crossReferences: crossReferences.value,
   })
 }
 
-onMounted(() => {
-  fetchReadViewData()
+onMounted(async () => {
+  await fetchReadViewData()
 
-  ui.setRightPanel(ReadBibleRightPanel, {
+  await ui.setRightPanel(ReadBibleRightPanel, {
     title: 'Study Tools',
     book: selectedBook.value,
     chapter: selectedChapter.value,
     selectedVerse: selectedVerse.value,   // live data from center → right
+    crossReferences: crossReferences.value,
   })
 })
 </script>

@@ -10,6 +10,38 @@ import { Create as $Create } from "@wailsio/runtime";
 // @ts-ignore: Unused imports
 import * as time$0 from "../../../../../../time/models.js";
 
+export class GetCrossReferencesResult {
+    /**
+     * Creates a new GetCrossReferencesResult instance.
+     * @param {Partial<GetCrossReferencesResult>} [$$source = {}] - The source object to create the GetCrossReferencesResult.
+     */
+    constructor($$source = {}) {
+        if (!("references" in $$source)) {
+            /**
+             * @member
+             * @type {(Reference | null)[]}
+             */
+            this["references"] = [];
+        }
+
+        Object.assign(this, $$source);
+    }
+
+    /**
+     * Creates a new GetCrossReferencesResult instance from a string or object.
+     * @param {any} [$$source = {}]
+     * @returns {GetCrossReferencesResult}
+     */
+    static createFrom($$source = {}) {
+        const $$createField0_0 = $$createType2;
+        let $$parsedSource = typeof $$source === 'string' ? JSON.parse($$source) : $$source;
+        if ("references" in $$parsedSource) {
+            $$parsedSource["references"] = $$createField0_0($$parsedSource["references"]);
+        }
+        return new GetCrossReferencesResult(/** @type {Partial<GetCrossReferencesResult>} */($$parsedSource));
+    }
+}
+
 export class GetVersesResponse {
     /**
      * Creates a new GetVersesResponse instance.
@@ -115,12 +147,96 @@ export class Note {
      * @returns {Note}
      */
     static createFrom($$source = {}) {
-        const $$createField1_0 = $$createType0;
+        const $$createField1_0 = $$createType3;
         let $$parsedSource = typeof $$source === 'string' ? JSON.parse($$source) : $$source;
         if ("verse_ref" in $$parsedSource) {
             $$parsedSource["verse_ref"] = $$createField1_0($$parsedSource["verse_ref"]);
         }
         return new Note(/** @type {Partial<Note>} */($$parsedSource));
+    }
+}
+
+export class Reference {
+    /**
+     * Creates a new Reference instance.
+     * @param {Partial<Reference>} [$$source = {}] - The source object to create the Reference.
+     */
+    constructor($$source = {}) {
+        if (!("id" in $$source)) {
+            /**
+             * @member
+             * @type {number}
+             */
+            this["id"] = 0;
+        }
+        if (!("from_book" in $$source)) {
+            /**
+             * @member
+             * @type {string}
+             */
+            this["from_book"] = "";
+        }
+        if (!("from_chapter" in $$source)) {
+            /**
+             * @member
+             * @type {number}
+             */
+            this["from_chapter"] = 0;
+        }
+        if (!("from_verse" in $$source)) {
+            /**
+             * @member
+             * @type {number}
+             */
+            this["from_verse"] = 0;
+        }
+        if (!("to_book" in $$source)) {
+            /**
+             * @member
+             * @type {string}
+             */
+            this["to_book"] = "";
+        }
+        if (!("to_chapter" in $$source)) {
+            /**
+             * @member
+             * @type {number}
+             */
+            this["to_chapter"] = 0;
+        }
+        if (!("to_verse_start" in $$source)) {
+            /**
+             * @member
+             * @type {number}
+             */
+            this["to_verse_start"] = 0;
+        }
+        if (!("to_verse_end" in $$source)) {
+            /**
+             * @member
+             * @type {number}
+             */
+            this["to_verse_end"] = 0;
+        }
+        if (!("votes" in $$source)) {
+            /**
+             * @member
+             * @type {number}
+             */
+            this["votes"] = 0;
+        }
+
+        Object.assign(this, $$source);
+    }
+
+    /**
+     * Creates a new Reference instance from a string or object.
+     * @param {any} [$$source = {}]
+     * @returns {Reference}
+     */
+    static createFrom($$source = {}) {
+        let $$parsedSource = typeof $$source === 'string' ? JSON.parse($$source) : $$source;
+        return new Reference(/** @type {Partial<Reference>} */($$parsedSource));
     }
 }
 
@@ -171,4 +287,7 @@ export class VerseKey {
 }
 
 // Private type creation functions
-const $$createType0 = VerseKey.createFrom;
+const $$createType0 = Reference.createFrom;
+const $$createType1 = $Create.Nullable($$createType0);
+const $$createType2 = $Create.Array($$createType1);
+const $$createType3 = VerseKey.createFrom;
