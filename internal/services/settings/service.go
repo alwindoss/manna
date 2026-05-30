@@ -100,7 +100,7 @@ func (ss *SettingsService) IsTableEmpty(tableName string) bool {
 	// QueryRowContext automatically manages timeouts if passed from your HTTP/main handler
 	err := ss.db.QueryRow(checkQuery).Scan(&exists)
 	if err == nil {
-		fmt.Println("Table 'cross_references' already has data. Skipping download and execution to prevent duplicates.")
+		log.Println("Table 'cross_references' already has data. Skipping download and execution to prevent duplicates.")
 		tableIsEmpty = false
 		return tableIsEmpty
 	}
@@ -126,14 +126,12 @@ func (ss *SettingsService) executeSQLiteStream(sqlStream io.Reader) error {
 		// Append the line to our current memory chunk block
 		chunkBuilder.WriteString(line)
 		chunkBuilder.WriteString("\n")
-		fmt.Printf("%d:\tBuffered line:\t%s\n\n", lineNum, line)
 
 		// Safely break chunks ONLY when a line ends with a semicolon.
 		// This protects multi-line block statements like the 'CREATE TABLE' definition.
 		if chunkBuilder.Len() >= maxChunkSize && strings.HasSuffix(line, ";") {
 			queryChunk := chunkBuilder.String()
 			chunkBuilder.Reset()
-			fmt.Printf("%d:\tExecuting SQL chunk size:\n%d\n", lineNum, chunkBuilder.Len())
 			// Execute directly on ss.db because the SQL file manages its own BEGIN/COMMIT
 			_, err := ss.db.Exec(queryChunk)
 			if err != nil {
