@@ -14,7 +14,10 @@
           <p class="page-subtitle">{{ routeMeta.subtitle }}</p>
         </div>
         <div class="header-actions">
-          <button class="action-btn" @click="ui.toggleRightPanel"
+          <button
+            v-if="!ui.disableRightPanel"
+            class="action-btn"
+            @click="ui.toggleRightPanel"
             :title="ui.rightPanelOpen ? 'Hide panel' : 'Show panel'">
             <span>{{ ui.rightPanelOpen ? '▶' : '◀' }}</span>
           </button>
@@ -32,7 +35,7 @@
 
     <!-- RIGHT PANEL — context-aware, collapses via store -->
     <Transition name="right-panel-slide">
-      <RightPanel v-if="ui.rightPanelOpen" />
+      <RightPanel v-if="ui.rightPanelOpen && !ui.disableRightPanel" />
     </Transition>
 
   </div>

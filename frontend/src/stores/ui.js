@@ -23,6 +23,24 @@ export const useUiStore = defineStore('ui', () => {
     rightPanelContext.value = { component: null, props: {} }
   }
 
+  // Some screens should not show any side panel, like Settings and Profile
+  const disableRightPanel = ref(false)
+  // function setRightPanelDisabled(val) {
+  //   disableRightPanel.value = val
+  //   if (val) rightPanelOpen.value = false  // close it immediately when disabled
+  // }
+  function setRightPanelDisabled(val) {
+    if (val) {
+      _panelStateBeforeDisable = rightPanelOpen.value  // save
+      rightPanelOpen.value = false
+    } else {
+      rightPanelOpen.value = _panelStateBeforeDisable  // restore
+    }
+    disableRightPanel.value = val
+  }
+
+  let _panelStateBeforeDisable = true
+
 
   const rightPanelOpen = ref(true)
   function toggleRightPanel() {
@@ -51,5 +69,6 @@ export const useUiStore = defineStore('ui', () => {
     selectedNote, setSelectedNote, clearSelectedNote,
     highlightedVerse, selectVerseHighlight, isVerseHighlighted,
     rightPanelContext, setRightPanel, clearRightPanel,
+    disableRightPanel, setRightPanelDisabled,
   }
 })
