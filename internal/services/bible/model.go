@@ -3,8 +3,12 @@ package bible
 import "time"
 
 type Bible struct {
-	Books   []*Book
-	Version string
+	Books       []*Book
+	Code        string // 'NIV', 'ESV', 'KJV', 'NLT'
+	Version     string
+	Language    string
+	IsInstalled bool
+	InstalledAt *time.Time
 }
 
 // Book represents a book of the Bible with its metadata.

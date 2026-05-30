@@ -8,7 +8,7 @@
 
         <div class="right-content">
             <div class="rp-section">
-                <div class="rp-section-label">Verse {{ selectedVerse.num }}</div>
+                <div class="rp-section-label">Verse</div>
                 <div class="cross-ref">
                     <!-- <span class="cross-ref-tag">1</span> -->
                     <span class="verse-text">{{selectedVerse.text}}</span>

@@ -1,6 +1,7 @@
 package bible
 
 import (
+	"database/sql"
 	"fmt"
 	"io/fs"
 	"strconv"
@@ -9,14 +10,21 @@ import (
 	"github.com/wailsapp/wails/v3/pkg/application"
 )
 
-func NewBibleService(app *application.App, dataFS fs.FS) *BibleService {
+type BibleServiceConfig struct {
+	App    *application.App
+	DataFS fs.FS
+	DB     *sql.DB
+}
+
+func NewBibleService(cfg *BibleServiceConfig) *BibleService {
 	bs := new(BibleService)
-	bs.app = app
+	bs.app = cfg.App
 	bs.bibleBooks = bibleBooks
 	bs.bibleChapters = bibleChapters
 	bs.bibleVerses = bibleVerses
 	bs.translationsAvailable = []string{"KJV", "AMP", "CEV", "ESV", "MSG", "NASB", "NIV", "NKJV"}
-	bs.dataFS = dataFS
+	bs.dataFS = cfg.DataFS
+	bs.db = cfg.DB
 	for _, t := range bs.translationsAvailable {
 		path := fmt.Sprintf("data/bibles/%s.xmm", t)
 		err := bs.importOpenSongBible(path, t)
@@ -36,6 +44,7 @@ type BibleService struct {
 	notes                 []Note
 	translationsAvailable []string
 	dataFS                fs.FS
+	db                    *sql.DB
 }
 
 func (bs *BibleService) GetBooksOfTheBible() []string {
@@ -67,6 +76,7 @@ func (bs *BibleService) importOpenSongBible(path string, version string) error {
 	}
 	bbl := new(Bible)
 	bbl.Version = version
+	bbl.Code = version
 	for bkIndex, book := range osb.B {
 		bk := new(Book)
 		bk.Name = book.N
@@ -91,6 +101,19 @@ func (bs *BibleService) importOpenSongBible(path string, version string) error {
 	bs.bibles = append(bs.bibles, bbl)
 
 	return nil
+}
+
+func (bs *BibleService) updateDBWithImportedBibles() {
+	tx, _ := bs.db.Begin()
+	q := `
+	INSERT INTO bible_translations
+	(code, name, language, is_installed, installed_at) VALUES
+	(?, ?, ?, ?, ?)
+	`
+	insertBibleTranslationStmt, _ := tx.Prepare(q)
+	for _, bbl := range bs.bibles {
+		insertBibleTranslationStmt.Exec(bbl.Code)
+	}
 }
 
 func (bs *BibleService) ShowWarning(title, message string) {

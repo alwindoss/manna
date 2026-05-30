@@ -31,7 +31,7 @@
 <script setup>
 import { onMounted, ref } from 'vue'
 import { useUiStore } from '@/stores/ui'
-import { GetBooksOfTheBible, GetCountOfChaptersInTheBook, GetListOfTranslationsAvailable, GetVerses, ShowError, ShowWarning } from '@@/bindings/github.com/dailymanna/manna/internal/bible/bibleservice'
+import { GetBooksOfTheBible, GetCountOfChaptersInTheBook, GetListOfTranslationsAvailable, GetVerses, ShowError, ShowWarning } from '@@/bindings/github.com/dailymanna/manna/internal/services/bible/bibleservice'
 import { Application } from '@wailsio/runtime'
 import BibleVersesList from '@/components/bible/BibleVersesList.vue'
 import ReadBibleRightPanel from '@/components/bible/ReadBibleRightPanel.vue'

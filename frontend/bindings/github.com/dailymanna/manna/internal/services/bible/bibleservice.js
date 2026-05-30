@@ -18,7 +18,7 @@ import * as $models from "./models.js";
  * @returns {$CancellablePromise<void>}
  */
 export function AddNote(text, book, chapter, verse) {
-    return $Call.ByID(913750679, text, book, chapter, verse);
+    return $Call.ByID(2777248012, text, book, chapter, verse);
 }
 
 /**
@@ -30,14 +30,14 @@ export function AddNote(text, book, chapter, verse) {
  * @returns {$CancellablePromise<void>}
  */
 export function DeleteNote(id, text, book, chapter, verse) {
-    return $Call.ByID(3620073671, id, text, book, chapter, verse);
+    return $Call.ByID(347501482, id, text, book, chapter, verse);
 }
 
 /**
  * @returns {$CancellablePromise<($models.Note | null)[]>}
  */
 export function GetAllNotes() {
-    return $Call.ByID(971743816).then(/** @type {($result: any) => any} */(($result) => {
+    return $Call.ByID(3702603387).then(/** @type {($result: any) => any} */(($result) => {
         return $$createType2($result);
     }));
 }
@@ -46,7 +46,7 @@ export function GetAllNotes() {
  * @returns {$CancellablePromise<string[]>}
  */
 export function GetBooksOfTheBible() {
-    return $Call.ByID(2449458788).then(/** @type {($result: any) => any} */(($result) => {
+    return $Call.ByID(2386403857).then(/** @type {($result: any) => any} */(($result) => {
         return $$createType3($result);
     }));
 }
@@ -56,7 +56,7 @@ export function GetBooksOfTheBible() {
  * @returns {$CancellablePromise<number>}
  */
 export function GetCountOfChaptersInTheBook(book) {
-    return $Call.ByID(2079381295, book);
+    return $Call.ByID(2981323392, book);
 }
 
 /**
@@ -65,14 +65,14 @@ export function GetCountOfChaptersInTheBook(book) {
  * @returns {$CancellablePromise<number>}
  */
 export function GetCountOfVersesInTheChapter(book, chapter) {
-    return $Call.ByID(2023180287, book, chapter);
+    return $Call.ByID(3659933878, book, chapter);
 }
 
 /**
  * @returns {$CancellablePromise<string[]>}
  */
 export function GetListOfTranslationsAvailable() {
-    return $Call.ByID(4195460196).then(/** @type {($result: any) => any} */(($result) => {
+    return $Call.ByID(2514256885).then(/** @type {($result: any) => any} */(($result) => {
         return $$createType3($result);
     }));
 }
@@ -82,7 +82,7 @@ export function GetListOfTranslationsAvailable() {
  * @returns {$CancellablePromise<($models.Note | null)[]>}
  */
 export function GetNoteByID(id) {
-    return $Call.ByID(1957627908, id).then(/** @type {($result: any) => any} */(($result) => {
+    return $Call.ByID(3458433867, id).then(/** @type {($result: any) => any} */(($result) => {
         return $$createType2($result);
     }));
 }
@@ -94,7 +94,7 @@ export function GetNoteByID(id) {
  * @returns {$CancellablePromise<($models.Note | null)[]>}
  */
 export function GetNoteByVerse(book, chapter, verse) {
-    return $Call.ByID(902583246, book, chapter, verse).then(/** @type {($result: any) => any} */(($result) => {
+    return $Call.ByID(3249457771, book, chapter, verse).then(/** @type {($result: any) => any} */(($result) => {
         return $$createType2($result);
     }));
 }
@@ -104,7 +104,7 @@ export function GetNoteByVerse(book, chapter, verse) {
  * @returns {$CancellablePromise<($models.Note | null)[]>}
  */
 export function GetNotesByBook(book) {
-    return $Call.ByID(3294203401, book).then(/** @type {($result: any) => any} */(($result) => {
+    return $Call.ByID(4157881560, book).then(/** @type {($result: any) => any} */(($result) => {
         return $$createType2($result);
     }));
 }
@@ -115,7 +115,7 @@ export function GetNotesByBook(book) {
  * @returns {$CancellablePromise<($models.Note | null)[]>}
  */
 export function GetNotesByChapter(book, chapter) {
-    return $Call.ByID(677043921, book, chapter).then(/** @type {($result: any) => any} */(($result) => {
+    return $Call.ByID(385003122, book, chapter).then(/** @type {($result: any) => any} */(($result) => {
         return $$createType2($result);
     }));
 }
@@ -127,7 +127,7 @@ export function GetNotesByChapter(book, chapter) {
  * @returns {$CancellablePromise<($models.GetVersesResponse | null)[]>}
  */
 export function GetVerses(version, book, chapter) {
-    return $Call.ByID(931891162, version, book, chapter).then(/** @type {($result: any) => any} */(($result) => {
+    return $Call.ByID(1005662017, version, book, chapter).then(/** @type {($result: any) => any} */(($result) => {
         return $$createType6($result);
     }));
 }
@@ -138,7 +138,7 @@ export function GetVerses(version, book, chapter) {
  * @returns {$CancellablePromise<void>}
  */
 export function ShowError(title, message) {
-    return $Call.ByID(551648961, title, message);
+    return $Call.ByID(1729053622, title, message);
 }
 
 /**
@@ -147,7 +147,7 @@ export function ShowError(title, message) {
  * @returns {$CancellablePromise<void>}
  */
 export function ShowWarning(title, message) {
-    return $Call.ByID(2673988031, title, message);
+    return $Call.ByID(219141692, title, message);
 }
 
 /**
@@ -159,7 +159,7 @@ export function ShowWarning(title, message) {
  * @returns {$CancellablePromise<void>}
  */
 export function UpdateNote(id, text, book, chapter, verse) {
-    return $Call.ByID(3325951317, id, text, book, chapter, verse);
+    return $Call.ByID(259919972, id, text, book, chapter, verse);
 }
 
 // Private type creation functions

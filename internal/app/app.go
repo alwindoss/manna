@@ -3,6 +3,7 @@ package app
 import (
 	"context"
 	"database/sql"
+	"fmt"
 	"io/fs"
 	"log"
 	"os"
@@ -10,7 +11,7 @@ import (
 	"runtime"
 	"time"
 
-	"github.com/dailymanna/manna/internal/bible"
+	"github.com/dailymanna/manna/internal/services/bible"
 	"github.com/pressly/goose/v3"
 
 	"github.com/wailsapp/wails/v3/pkg/application"
@@ -32,7 +33,7 @@ type Config struct {
 }
 
 func NewMannaApp(cfg *Config) *application.App {
-	dbPath := "./tmp/manna/data/sqlite.db"
+	dbPath := "./tmp/manna/data/manna.db"
 	appEnv, appEnvfound := os.LookupEnv("APP_ENV")
 	developmentMode := true
 	if !appEnvfound {
@@ -45,8 +46,8 @@ func NewMannaApp(cfg *Config) *application.App {
 			log.Fatalf("failed to create db directory: %v", err)
 		}
 	}
-
-	db, err := sql.Open("sqlite", "./tmp/manna/data/sqlite.db")
+	dbPathWithOptions := fmt.Sprintf("%s?_pragma=journal_mode(WAL)&_pragma=synchronous(NORMAL)&_pragma=cache_size(-64000)", dbPath)
+	db, err := sql.Open("sqlite", dbPathWithOptions)
 	if err != nil {
 		log.Fatalf("failed to connect to DB: %v", err)
 	}
@@ -81,7 +82,12 @@ func NewMannaApp(cfg *Config) *application.App {
 			ApplicationShouldTerminateAfterLastWindowClosed: true,
 		},
 	})
-	bibleSvc := bible.NewBibleService(app, cfg.FS)
+	bibleSvcCfg := &bible.BibleServiceConfig{
+		App:    app,
+		DataFS: cfg.FS,
+		DB:     db,
+	}
+	bibleSvc := bible.NewBibleService(bibleSvcCfg)
 
 	app.RegisterService(application.NewService(bibleSvc))
 
